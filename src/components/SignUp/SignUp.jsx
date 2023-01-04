@@ -59,7 +59,7 @@ const SignUp = () => {
                                 </form>
                                 <hr/>
                                 <div className="text-center">
-                                    <a className="small" onClick={handleClickLogIn}>Already have an account? Login!</a>
+                                    <a className="small cursor-pointer" onClick={handleClickLogIn}>Already have an account? Login!</a>
                                 </div>
                             </div>
                         </div>

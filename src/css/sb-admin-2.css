@@ -75,6 +75,10 @@ body {
   outline: 0 !important;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 hr {
   box-sizing: content-box;
   height: 0;
@@ -10854,12 +10858,6 @@ a:focus {
   .chart-pie {
     height: calc(20rem - 43px) !important;
   }
-}
-
-.bg-login-image {
-  background: url("https://source.unsplash.com/K4mSJ7kc0As/600x800");
-  background-position: center;
-  background-size: cover;
 }
 
 .bg-password-image {
