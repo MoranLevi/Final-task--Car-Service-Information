@@ -15,8 +15,7 @@ const LogIn = () => {
     };
     
     return (
-        <div class="bg-gradient-primary">
-            <div class="container">
+        <div class="container">
 
             <div class="row justify-content-center">
 
@@ -75,7 +74,6 @@ const LogIn = () => {
                 </div>
 
             </div>
-        </div>
     </div>
     );
 };

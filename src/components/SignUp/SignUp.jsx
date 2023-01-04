@@ -17,9 +17,7 @@ const SignUp = () => {
     };
     
     return (
-        <div className='sign-up-container'>
-        <div className="bg-gradient-primary">
-            <div className="container">
+        <div className="container">
 
             <div className="card o-hidden border-0 shadow-lg my-5">
                 <div className="card-body p-0">
@@ -70,8 +68,6 @@ const SignUp = () => {
             </div>
 
         </div>
-        </div>
-    </div>
     );
 };
 
