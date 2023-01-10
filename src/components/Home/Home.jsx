@@ -42,8 +42,7 @@ const Home = () => {
                     </div>
                 </div>
                 </center>
-            </div>
-            
+            </div>   
         </div>
     );
 };

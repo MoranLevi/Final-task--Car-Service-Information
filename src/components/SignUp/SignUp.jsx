@@ -1,73 +1,95 @@
 import React from 'react';
+import { useNavigate  } from 'react-router-dom';
+import { signUpSchema } from 'Validations/SignUpValidation';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './SignUp.css';
+import '../../css/sb-admin-2.css';
 
 const SignUp = () => {
 
-    return (
-        <div class="bg-gradient-primary">
-        <div class="container">
+    const navigate = useNavigate();
 
-        <div class="card o-hidden border-0 shadow-lg my-5">
-            <div class="card-body p-0">
-                <div class="row">
-                    <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
-                    <div class="col-lg-7">
-                        <div class="p-5">
-                            <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
-                            </div>
-                            <form class="user">
-                                <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="text" class="form-control form-control-user" id="exampleFirstName"
-                                            placeholder="First Name"/>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <input type="text" class="form-control form-control-user" id="exampleLastName"
-                                            placeholder="Last Name"/>
-                                    </div>
+    const handleClickHome = () => {
+        navigate('/');
+    };
+
+    const handleClickLogIn = () => {
+        navigate('/logIn');
+    };
+    
+    const { register, handleSubmit, formState: { errors }} = useForm({
+        resolver: yupResolver(signUpSchema),
+        mode: "onChange"
+    });
+
+    const submitForm = (data) => {
+        //add fetch to send data to backend
+        console.log(data);
+        handleClickHome();
+    };
+    
+    console.error(errors);
+    return (
+        <div className="container">
+
+            <div className="card o-hidden border-0 shadow-lg my-5">
+                <div className="card-body p-0">
+                    <div className="row">
+                        <div className="col-lg-5 d-none d-lg-block bg-register-image"></div>
+                        <div className="col-lg-7">
+                            <div className="p-5">
+                                <div className="text-center">
+                                    <h1 className="h4 text-gray-900 mb-4">Create an Account!</h1>
                                 </div>
-                                <div class="form-group">
-                                    <input type="email" class="form-control form-control-user" id="exampleInputEmail"
-                                        placeholder="Email Address"/>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="password" class="form-control form-control-user"
-                                            id="exampleInputPassword" placeholder="Password"/>
+                                <form className="user" onSubmit={handleSubmit(submitForm)}>
+                                    <div className="form-group row">
+                                        <div className="col-sm-6 mb-3 mb-sm-0">
+                                            <input type="text" className="form-control form-control-user" name="firstName"
+                                                placeholder="First Name" {...register('firstName')}/>
+                                            <p className='error-msg'>{errors.firstName ? errors.firstName?.message : ''}</p>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <input type="text" className="form-control form-control-user" name="lastName"
+                                                placeholder="Last Name" {...register('lastName')}/>
+                                            <p className='error-msg'>{errors?.lastName ? errors.lastName?.message : ''}</p>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-6">
-                                        <input type="password" class="form-control form-control-user"
-                                            id="exampleRepeatPassword" placeholder="Repeat Password"/>
+                                    <div className="form-group">
+                                        <input type="email" className="form-control form-control-user" name="email"
+                                            placeholder="Email Address" {...register('email')}/>
+                                        <p className='error-msg'>{errors.email ? errors.email?.message : ''}</p>
                                     </div>
-                                </div>
-                                <a href="login.html" class="btn btn-primary btn-user btn-block">
-                                    Register Account
-                                </a>
+                                    <div className="form-group row">
+                                        <div className="col-sm-6 mb-3 mb-sm-0">
+                                            <input type="password" className="form-control form-control-user"
+                                                name="password" placeholder="Password" {...register('password')}/>
+                                            <p className='error-msg'>{errors?.password ? errors.password?.message : ' '}</p>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <input type="password" className="form-control form-control-user"
+                                                name="repeatPassword" placeholder="Repeat Password" {...register('repeatPassword')}/>
+                                            <p className='error-msg'>{errors.repeatPassword ? errors.repeatPassword?.message : ' '}</p>
+                                        </div>
+                                    </div>
+                                    {/* <a className="btn btn-primary btn-user btn-block">
+                                        Register Account
+                                    </a> */}
+                                    <input type="submit" className="btn btn-primary btn-user btn-block" value={'Register Account'}></input>
+                                </form>
                                 <hr/>
-                                <a href="index.html" class="btn btn-google btn-user btn-block">
-                                    <i class="fab fa-google fa-fw"></i> Register with Google
-                                </a>
-                                <a href="index.html" class="btn btn-facebook btn-user btn-block">
-                                    <i class="fab fa-facebook-f fa-fw"></i> Register with Facebook
-                                </a>
-                            </form>
-                            <hr/>
-                            <div class="text-center">
-                                <a class="small" href="forgot-password.html">Forgot Password?</a>
-                            </div>
-                            <div class="text-center">
-                                <a class="small" href="login.html">Already have an account? Login!</a>
+                                <div className="text-center">
+                                    <a className="small cursor-pointer" onClick={handleClickLogIn}>Already have an account? Login!</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-    </div>
-    </div>
+        </div>
     );
 };
 
