@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate  } from 'react-router-dom';
-import { signUpSchema } from 'Validations/SignUpValidation';
+import { signUpSchema } from 'Validations/FormsValidation';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
@@ -31,7 +31,6 @@ const SignUp = () => {
         handleClickHome();
     };
     
-    console.error(errors);
     return (
         <div className="container">
 
