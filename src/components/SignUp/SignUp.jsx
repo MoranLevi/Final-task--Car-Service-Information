@@ -48,34 +48,31 @@ const SignUp = () => {
                                         <div className="col-sm-6 mb-3 mb-sm-0">
                                             <input type="text" className="form-control form-control-user" name="firstName"
                                                 placeholder="First Name" {...register('firstName')}/>
-                                            <p className='error-msg'>{errors.firstName ? errors.firstName?.message : ''}</p>
+                                            {errors.firstName ? <p className='error-msg'>{errors.firstName?.message}</p> : <br/>}
                                         </div>
                                         <div className="col-sm-6">
                                             <input type="text" className="form-control form-control-user" name="lastName"
                                                 placeholder="Last Name" {...register('lastName')}/>
-                                            <p className='error-msg'>{errors?.lastName ? errors.lastName?.message : ''}</p>
+                                            {errors.lastName ? <p className='error-msg'>{errors.lastName?.message}</p> : <p className='space'>{'.'}</p>}
                                         </div>
                                     </div>
                                     <div className="form-group">
                                         <input type="email" className="form-control form-control-user" name="email"
                                             placeholder="Email Address" {...register('email')}/>
-                                        <p className='error-msg'>{errors.email ? errors.email?.message : ''}</p>
+                                        {errors.email ? <p className='error-msg'>{errors.email?.message}</p> : <br/>}
                                     </div>
                                     <div className="form-group row">
                                         <div className="col-sm-6 mb-3 mb-sm-0">
                                             <input type="password" className="form-control form-control-user"
                                                 name="password" placeholder="Password" {...register('password')}/>
-                                            <p className='error-msg'>{errors?.password ? errors.password?.message : ' '}</p>
+                                            {errors.password ? <p className='error-msg'>{errors.password?.message}</p> : <br/>}
                                         </div>
                                         <div className="col-sm-6">
                                             <input type="password" className="form-control form-control-user"
                                                 name="repeatPassword" placeholder="Repeat Password" {...register('repeatPassword')}/>
-                                            <p className='error-msg'>{errors.repeatPassword ? errors.repeatPassword?.message : ' '}</p>
+                                            {errors.repeatPassword ? <p className='error-msg'>{errors.repeatPassword?.message}</p> : <p className='space2'>{'.'}</p>}
                                         </div>
                                     </div>
-                                    {/* <a className="btn btn-primary btn-user btn-block">
-                                        Register Account
-                                    </a> */}
                                     <input type="submit" className="btn btn-primary btn-user btn-block" value={'Register Account'}></input>
                                 </form>
                                 <hr/>

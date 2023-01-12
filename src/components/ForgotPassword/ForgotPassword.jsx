@@ -56,11 +56,8 @@ const ForgotPassword = () => {
                                                 <input type="email" class="form-control form-control-user"
                                                     name="email" aria-describedby="emailHelp"
                                                     placeholder="Enter Email Address..." {...register('email')}/>
-                                                <p className='error-msg'>{errors.email ? errors.email?.message : ' '}</p>
+                                                    {errors.email ? <p className='error-msg'>{errors.email?.message}</p> : <br/>}
                                             </div>
-                                            {/* <a class="btn btn-primary btn-user btn-block" onClick={handleClickHome}>
-                                                Reset Password
-                                            </a> */}
                                             <input type="submit" className="btn btn-primary btn-user btn-block" value={'Reset Password'}></input>
                                         </form>
                                         <hr/>

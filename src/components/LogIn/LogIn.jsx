@@ -54,12 +54,12 @@ const LogIn = () => {
                                                 <input type="email" className="form-control form-control-user"
                                                     name="email" aria-describedby="emailHelp"
                                                     placeholder="Enter Email Address..." {...register('email')}/>
-                                                <p className='error-msg'>{errors.email ? errors.email?.message : ' '}</p>
+                                                {errors.email ? <p className='error-msg'>{errors.email?.message}</p> : <br/>}
                                             </div>
                                             <div className="form-group">
                                                 <input type="password" className="form-control form-control-user"
                                                     name="password" placeholder="Password" {...register('password')}/>
-                                                <p className='error-msg'>{errors.password ? errors.password?.message : ' '}</p>
+                                                {errors.password ? <p className='error-msg'>{errors.password?.message}</p> : <br/>}
                                             </div>
                                             <div className="form-group">
                                                 <div className="custom-control custom-checkbox small">
@@ -68,9 +68,6 @@ const LogIn = () => {
                                                         Me</label>
                                                 </div>
                                             </div>
-                                            {/* <a className="btn btn-primary btn-user btn-block" onClick={handleClickHome}>
-                                                Login
-                                            </a> */}
                                             <input type="submit" className="btn btn-primary btn-user btn-block" value={'Login'}></input>
                                             <hr/>
                                         </form>
