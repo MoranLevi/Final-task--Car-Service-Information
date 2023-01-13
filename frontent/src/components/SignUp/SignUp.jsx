@@ -25,9 +25,34 @@ const SignUp = () => {
         mode: "onChange"
     });
 
-    const submitForm = (data) => {
-        //add fetch to send data to backend
-        console.log(data);
+    const submitForm = async (data) => {
+
+        const requestMsg = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(
+                {
+                    title:     'SignUp',
+                    email:     data.email,
+                    firstName: data.firstName,
+                    lastName:  data.lastName,
+                    password:  data.password,
+                    connected: false
+                })
+        };
+
+        console.log("requesting");
+
+        const response = await fetch('/signUp', requestMsg)
+        console.log(response);
+        if (!response.ok) {
+            alert('Invalid Registration Details');
+            return;
+        }
+        const responseData = await response.json();
+        console.log(responseData);
+        alert('Registered! Please login.')
+
         handleClickHome();
     };
     
