@@ -183,8 +183,8 @@ app.post('/forgotPassword', (req, res) => {
             let mailOptions ={
                 from:'yassmineMoran@hotmail.com',
                 to: 'yassmine.student@outlook.com',
-                subject: 'try',
-                text: 'Hello'
+                subject: 'Reset Password',
+                text: 'Hello,<br> http://localhost:3000/#/resetPassword'
             };
             transporter.sendMail(mailOptions, function(err,info){
                 if(err){
@@ -210,6 +210,45 @@ app.post('/forgotPassword', (req, res) => {
                 })
         })
 
+        ///////////////////////*****************************************************ResetPassword **************************//////
+    app.post('/resetPassword', (req, res) => {
+            console.log("POST resetPassword")
+
+    if (req.body.title !== "ResetPassword") {
+        res.status(400)
+        res.send("Bad Reset Password Request.")
+        return
+    }
+
+    //const query = `SELECT * FROM ${USERS_TABLE.name} WHERE ${USERS_TABLE.columns.email} = ? AND ${USERS_TABLE.columns.password} = ?`
+    const query = `UPDATE ${USERS_TABLE.name} SET ${USERS_TABLE.columns.password} = ? WHERE ${USERS_TABLE.columns.email} = ?`
+    databaseConnection.query(query, [req.body.password,req.body.email],
+        (err, result) => {
+            if (err) {
+                res.status(500)//Internal server error
+                res.send(err)
+                return
+            }
+
+            if (result.length === 0) {
+                res.status(400)//bad request
+                res.send("Invalid email parameters.")
+                return
+            }
+
+            const resetPasswordMsg = {
+                method: 'GET',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(
+                    {
+                        title: 'resetPassword',
+                        resetPasswordResult: 'OK',
+                    })
+            }
+            res.type('application/json')
+            res.send(resetPasswordMsg)
+        })
+        })
 
 
 
