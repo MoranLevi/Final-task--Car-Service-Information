@@ -45,6 +45,46 @@ function handleDisconnect() {
 
 handleDisconnect();
 
+app.post('/logIn', (req, res) => {
+    console.log("POST login")
+
+    if (req.body.title !== "LogIn") {
+        res.status(400)
+        res.send("Bad Login Request.")
+        return
+    }
+
+    const query = `SELECT * FROM ${USERS_TABLE.name} WHERE ${USERS_TABLE.columns.email} = ? AND ${USERS_TABLE.columns.password} = ?`
+    databaseConnection.query(query, [req.body.email, req.body.password],
+        (err, result) => {
+            if (err) {
+                res.status(500)//Internal server error
+                res.send(err)
+                return
+            }
+
+            if (result.length === 0) {
+                res.status(400)//bad request
+                res.send("Invalid login parameters.")
+                return
+            }
+
+            const resMsg = {
+                method: 'GET',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(
+                    {
+                        title: 'LogIn',
+                        loginResult: 'OK',
+                        firstName: result[0].firstName,
+                        lastName:  result[0].lastName,
+                    })
+            }
+            res.type('application/json')
+            res.send(resMsg)
+        })
+})
+
 app.post('/signUp', (req, res) => {
     console.log("POST Sign-Up")
 

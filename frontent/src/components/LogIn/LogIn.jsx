@@ -27,8 +27,30 @@ const LogIn = () => {
         mode: "onChange"
     });
 
-    const submitForm = (data) => {
-        //add fetch to send data to backend
+    const submitForm = async (data) => {
+
+        const requestMsg = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(
+                {
+                    title: 'LogIn',
+                    email: data.email,
+                    password: data.password,
+                })
+        };
+        console.log("requesting");
+
+        const response = await fetch('/logIn', requestMsg);
+
+        if (!response.ok) {
+            alert('Invalid Login Details');
+            return;
+        }
+        let responseData = await response.json();
+        responseData = JSON.parse(responseData.body);
+        console.log(responseData)
+            
         console.log(data);
         handleClickHome();
     };
