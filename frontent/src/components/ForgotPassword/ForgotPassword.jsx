@@ -27,9 +27,29 @@ const ForgotPassword = () => {
         mode: "onChange"
     });
 
-    const submitForm = (data) => {
+    const submitForm = async (data) => {
         //add fetch to send data to backend
-        console.log(data);
+        const requestMsg = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(
+                {
+                    title:     'ForgotPassword',
+                    email:     data.email
+                })
+        };
+        console.log("requesting");
+
+        const response = await fetch('/forgotPassword', requestMsg)
+        console.log(response);
+        if (!response.ok) {
+            alert('Invalid Details');
+            return;
+        }
+        const responseData = await response.json();
+        console.log(responseData);
+        alert('Sent! Check your mail.')
+
         handleClickHome();
     };
 

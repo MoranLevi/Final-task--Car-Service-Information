@@ -143,7 +143,7 @@ app.post('/signUp', (req, res) => {
         })
 })
 
-app.post('/ForgotPassword', (req, res) => {
+app.post('/forgotPassword', (req, res) => {
     console.log("POST Forgot")
 
     if (req.body.title !== "ForgotPassword") {
@@ -171,22 +171,22 @@ app.post('/ForgotPassword', (req, res) => {
             ///////////////////////***********************************************fORGOT pASS*//////////////////////
             /* Insert new user */
             console.log("132")
-            const transporter = nodemailer.createTransport({
-                service: "gmail",
+            let transporter = nodemailer.createTransport({
+                service: 'hotmail',
                 auth: {
-                    user: "yassminemoranProj@gmail.com",
-                    pass: "ClientServer"
+                    user: 'yassmineMoran@hotmail.com',
+                    pass: 'ClientServer'
                 }
             
             });
             console.log("140")
-            const options ={
-                from:"yassminemoranProj@gmail.com",
-                to: "yassmine.student@outlook.com",
-                subject: "try",
-                text: "Hello"
-            }
-            transporter.sendMail(options, function(err,info){
+            let mailOptions ={
+                from:'yassmineMoran@hotmail.com',
+                to: 'yassmine.student@outlook.com',
+                subject: 'try',
+                text: 'Hello'
+            };
+            transporter.sendMail(mailOptions, function(err,info){
                 if(err){
                     console.log(err);
                     return;
