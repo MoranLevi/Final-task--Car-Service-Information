@@ -4,6 +4,7 @@ import { signUpSchema } from 'Validations/FormsValidation';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
+import ReCAPTCHA from "react-google-recaptcha";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './SignUp.css';
 import '../../css/sb-admin-2.css';
@@ -11,6 +12,8 @@ import '../../css/sb-admin-2.css';
 const SignUp = () => {
 
     const navigate = useNavigate();
+
+    const [isReCAPTCHVerified, setIsReCAPTCHVerified] = React.useState(false);
 
     const handleClickHome = () => {
         navigate('/');
@@ -24,6 +27,11 @@ const SignUp = () => {
         resolver: yupResolver(signUpSchema),
         mode: "onChange"
     });
+
+    const handleOnChangeRecaptcha = (value) => {
+        console.log("Captcha value:", value);
+        setIsReCAPTCHVerified(true);
+    };
 
     const submitForm = async (data) => {
 
@@ -70,7 +78,8 @@ const SignUp = () => {
                                 </div>
                                 <form className="user" onSubmit={handleSubmit(submitForm)}>
                                     <div className="form-group row">
-                                        <div className="col-sm-6 mb-3 mb-sm-0">
+                                        {/* <div className="col-sm-6 mb-3 mb-sm-0"> */}
+                                        <div className="col-sm-6">
                                             <input type="text" className="form-control form-control-user" name="firstName"
                                                 placeholder="First Name" {...register('firstName')}/>
                                             {errors.firstName ? <p className='error-msg'>{errors.firstName?.message}</p> : <br/>}
@@ -87,7 +96,8 @@ const SignUp = () => {
                                         {errors.email ? <p className='error-msg'>{errors.email?.message}</p> : <br/>}
                                     </div>
                                     <div className="form-group row">
-                                        <div className="col-sm-6 mb-3 mb-sm-0">
+                                        {/* <div className="col-sm-6 mb-3 mb-sm-0"> */}
+                                        <div className="col-sm-6">
                                             <input type="password" className="form-control form-control-user"
                                                 name="password" placeholder="Password" {...register('password')}/>
                                             {errors.password ? <p className='error-msg'>{errors.password?.message}</p> : <br/>}
@@ -98,7 +108,11 @@ const SignUp = () => {
                                             {errors.repeatPassword ? <p className='error-msg'>{errors.repeatPassword?.message}</p> : <p className='space2'>{'.'}</p>}
                                         </div>
                                     </div>
-                                    <input type="submit" className="btn btn-primary btn-user btn-block" value={'Register Account'}></input>
+                                    <center className='margin-bottom-ReCAPTCHA'><ReCAPTCHA
+                                        sitekey="6LfbiPYjAAAAAHwsUIOaDh0FDT_r4rJoLBUMpkAp"
+                                        onChange={handleOnChangeRecaptcha}
+                                    /></center>
+                                    <input type="submit" className="btn btn-primary btn-user btn-block" value={'Register Account'} disabled={!isReCAPTCHVerified}></input>
                                 </form>
                                 <hr/>
                                 <div className="text-center">
