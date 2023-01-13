@@ -86,7 +86,7 @@ const LogIn = () => {
                                             <div className="form-group">
                                                 <div className="custom-control custom-checkbox small">
                                                     <input type="checkbox" className="custom-control-input" id="customCheck"/>
-                                                    <label className="custom-control-label remember-me-label" for="customCheck">Remember
+                                                    <label className="custom-control-label remember-me-label" htmlFor="customCheck">Remember
                                                         Me</label>
                                                 </div>
                                             </div>
