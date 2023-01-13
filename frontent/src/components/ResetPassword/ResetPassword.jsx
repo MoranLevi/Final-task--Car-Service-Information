@@ -1,5 +1,5 @@
 import React from 'react';
-//import { forgotPasswordSchema } from 'Validations/FormsValidation';
+import {resetPasswordSchema } from 'Validations/FormsValidation';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
@@ -20,8 +20,7 @@ const ResetPassword = () => {
     };
 
     const { register, handleSubmit, formState: { errors }} = useForm({
-        //resolver: yupResolver(forgotPasswordSchema),
-        //resolver: yupResolver(resetPasswordSchema),
+        resolver: yupResolver(resetPasswordSchema),
         mode: "onChange"
     });
 

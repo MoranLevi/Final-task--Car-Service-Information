@@ -22,3 +22,9 @@ export const logInSchema = yup.object().shape({
 export const forgotPasswordSchema = yup.object().shape({
     email: yup.string().email('Invalid email').required('Email is required'),
 });
+
+export const resetPasswordSchema = yup.object().shape({
+    email: yup.string().email('Invalid email').required('Email is required'),
+    password: yup.string().min(6, 'Password must be at least 6 chars').required('Password is required'),
+    repeatPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match').required('Confirm password is required')
+});
