@@ -1,6 +1,7 @@
 const mysql = require('mysql')
 const express = require('express')
 const cors = require('cors');
+const nodemailer =require('nodemailer');
 const { USERS_TABLE, CARS_TABLE } = require('./DatabaseTables')
 
 const app = express()
@@ -101,6 +102,76 @@ app.post('/signUp', (req, res) => {
                 })
         })
 })
+
+app.post('/ForgotPassword', (req, res) => {
+    console.log("POST Forgot")
+
+    if (req.body.title !== "ForgotPassword") {
+        res.status(400)
+        res.send("Bad Request.")
+        return
+    }
+
+    /* Check if user already exist */
+    const query = `SELECT * FROM ${USERS_TABLE.name} WHERE ${USERS_TABLE.columns.email} = ?`
+    databaseConnection.query(query, [req.body.email],
+        (err, result) => {
+            if (err) {
+                res.status(500)
+                console.log("120")
+                res.send(err)
+                return
+            }
+            if (result.length == 0) {
+                res.status(400)
+                console.log("125")
+                res.send("Email DOESN'T exists")
+                return
+            }
+            ///////////////////////***********************************************fORGOT pASS*//////////////////////
+            /* Insert new user */
+            console.log("132")
+            const transporter = nodemailer.createTransport({
+                service: "gmail",
+                auth: {
+                    user: "yassminemoranProj@gmail.com",
+                    pass: "ClientServer"
+                }
+            
+            });
+            console.log("140")
+            const options ={
+                from:"yassminemoranProj@gmail.com",
+                to: "yassmine.student@outlook.com",
+                subject: "try",
+                text: "Hello"
+            }
+            transporter.sendMail(options, function(err,info){
+                if(err){
+                    console.log(err);
+                    return;
+                }
+                console.log("sent: "+info.response);
+            
+            })
+            console.log("156")
+                    const signUpMsg = {
+                        method: 'GET',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(
+                            {
+                                title: 'signUp',
+                                signUpResult: 'OK',
+                            })
+                    }
+                    console.log("166")
+                    res.type('application/json')
+                    res.send(signUpMsg)
+                })
+        })
+
+
+
 
 app.listen(port, () => {
     console.log(`Car-Service server listening on http://localhost:${port}`)
