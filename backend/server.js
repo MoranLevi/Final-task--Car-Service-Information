@@ -182,9 +182,9 @@ app.post('/forgotPassword', (req, res) => {
             console.log("140")
             let mailOptions ={
                 from:'yassmineMoran@hotmail.com',
-                to: 'yassmine.student@outlook.com',
+                to: req.body.email,
                 subject: 'Reset Password',
-                text: 'Hello,<br> http://localhost:3000/#/resetPassword'
+                text: 'Hello,\nEnter the following link to reset password:\nhttp://localhost:3000/#/resetPassword'
             };
             transporter.sendMail(mailOptions, function(err,info){
                 if(err){
@@ -225,13 +225,15 @@ app.post('/forgotPassword', (req, res) => {
     databaseConnection.query(query, [req.body.password,req.body.email],
         (err, result) => {
             if (err) {
+                console.log("228")
                 res.status(500)//Internal server error
                 res.send(err)
                 return
             }
-
-            if (result.length === 0) {
+            console.log(result.length,result)
+            if (result.affectedRows === 0) {
                 res.status(400)//bad request
+                
                 res.send("Invalid email parameters.")
                 return
             }
