@@ -34,7 +34,11 @@ const SignUp = () => {
     };
 
     const submitForm = async (data) => {
-
+        if(!isReCAPTCHVerified) {
+            alert('Please verify that you are not a robot');
+            return;
+        }
+        
         const requestMsg = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -112,7 +116,8 @@ const SignUp = () => {
                                         sitekey="6LfbiPYjAAAAAHwsUIOaDh0FDT_r4rJoLBUMpkAp"
                                         onChange={handleOnChangeRecaptcha}
                                     /></center>
-                                    <input type="submit" className="btn btn-primary btn-user btn-block" value={'Register Account'} disabled={!isReCAPTCHVerified}></input>
+                                    <input type="submit" className="btn btn-primary btn-user btn-block" value={'Register Account'}></input>
+                                    {/* <input type="submit" className="btn btn-primary btn-user btn-block" value={'Register Account'} disabled={!isReCAPTCHVerified}></input> */}
                                 </form>
                                 <hr/>
                                 <div className="text-center">
