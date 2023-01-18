@@ -3,7 +3,7 @@ import { useNavigate  } from 'react-router-dom';
 import { signUpSchema } from 'Validations/FormsValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { md5 } from 'md5';
+import md5 from 'md5';
 import ReCAPTCHA from 'react-google-recaptcha';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './SignUp.css';
@@ -62,7 +62,7 @@ const SignUp = () => {
                     firstName: data.firstName,
                     lastName:  data.lastName,
                     password:  md5(data.password),
-                    connected: false
+                    connected: 0
                 })
         };
 

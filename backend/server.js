@@ -197,20 +197,20 @@ app.post('/forgotPassword', (req, res) => {
             
             })
             console.log("156")
-                    const signUpMsg = {
-                        method: 'GET',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify(
-                            {
-                                title: 'signUp',
-                                signUpResult: 'OK',
-                            })
-                    }
-                    console.log("166")
-                    res.type('application/json')
-                    res.send(signUpMsg)
+            const signUpMsg = {
+                method: 'GET',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(
+                {
+                    title: 'signUp',
+                    signUpResult: 'OK',
                 })
+            }
+            console.log("166")
+            res.type('application/json')
+            res.send(signUpMsg)
         })
+})
 
         ///////////////////////*****************************************************ResetPassword **************************//////
 app.post('/resetPassword', (req, res) => {

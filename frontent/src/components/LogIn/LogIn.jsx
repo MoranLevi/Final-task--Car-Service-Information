@@ -3,6 +3,7 @@ import { logInSchema } from 'Validations/FormsValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate  } from 'react-router-dom';
+import md5 from 'md5';
 import ReCAPTCHA from 'react-google-recaptcha';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './LogIn.css';
@@ -61,7 +62,7 @@ const LogIn = () => {
                 {
                     title: 'LogIn',
                     email: data.email,
-                    password: data.password,
+                    password: md5(data.password),
                 })
         };
 
@@ -77,7 +78,6 @@ const LogIn = () => {
         responseData = JSON.parse(responseData.body);
         console.log(responseData)
             
-        console.log(data);
         handleClickHome();
     };
 

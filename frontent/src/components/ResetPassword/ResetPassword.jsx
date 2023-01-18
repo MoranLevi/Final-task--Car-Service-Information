@@ -1,10 +1,10 @@
 import React from 'react';
 import {resetPasswordSchema } from 'Validations/FormsValidation';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import md5 from 'md5';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useNavigate  } from 'react-router-dom';
 import './ResetPassword.css';
 
 const ResetPassword = () => {
@@ -31,9 +31,9 @@ const ResetPassword = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(
                 {
-                    title:     'ResetPassword',
+                    title:       'ResetPassword',
                     email:        data.email,
-                    password:     data.password
+                    password:     md5(data.password)
                 })
         };
         console.log("requesting");
@@ -52,24 +52,22 @@ const ResetPassword = () => {
     };
 
     return (
-        <div class="container">
+        <div className="container">
 
-            <div class="row justify-content-center">
-
-                <div class="col-xl-10 col-lg-12 col-md-9">
-
-                    <div class="card o-hidden border-0 shadow-lg my-5">
-                        <div class="card-body p-0">
-                            <div class="row">
-                                <div class="col-lg-6 d-none d-lg-block bg-password-image"></div>
-                                <div class="col-lg-6">
-                                    <div class="p-5">
+            <div className="row justify-content-center">
+                <div className="col-xl-10 col-lg-12 col-md-9">
+                    <div className="card o-hidden border-0 shadow-lg my-5">
+                        <div className="card-body p-0">
+                            <div className="row">
+                                <div className="col-lg-6 d-none d-lg-block bg-password-image"></div>
+                                <div className="col-lg-6">
+                                    <div className="p-5">
                                         <div className="text-center">
                                             <h1 className="h4 text-gray-900 mb-4">Reset Password!</h1>
                                         </div>
-                                        <form class="user" onSubmit={handleSubmit(submitForm)}>
-                                            <div class="form-group">
-                                                <input type="email" class="form-control form-control-user"
+                                        <form className="user" onSubmit={handleSubmit(submitForm)}>
+                                            <div className="form-group">
+                                                <input type="email" className="form-control form-control-user"
                                                     name="email" aria-describedby="emailHelp"
                                                     placeholder="Enter Email Address..." {...register('email')}/>
                                                 {errors.email ? <p className='error-msg'>{errors.email?.message}</p> : <br/>}
@@ -83,8 +81,8 @@ const ResetPassword = () => {
                                             <input type="submit" className="btn btn-primary btn-user btn-block" value={'Reset Password'}></input>
                                         </form>
                                         <hr/>
-                                        <div class="text-center">
-                                            <a class="small cursor-pointer" onClick={handleClickHome}>Disscare</a>
+                                        <div className="text-center">
+                                            <a className="small cursor-pointer" onClick={handleClickHome}>Disscare</a>
                                         </div>
                                     </div>
                                 </div>
