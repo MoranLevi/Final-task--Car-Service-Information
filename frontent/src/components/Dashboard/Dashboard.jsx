@@ -1,10 +1,21 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
+import { useNavigate  } from 'react-router-dom';
 import ReactTable from '../ReactTable/ReactTable';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Dashboard.css';
 
 const Dashboard = () => {
     
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        // Check for a stored session in local storage
+        const storedSession = localStorage.getItem('session');
+        if (!storedSession) {
+            navigate('*');
+        }
+    }, []); // Only run this effect once
+
     const tempData = [
         {
             "treatmentNumber": 117,
