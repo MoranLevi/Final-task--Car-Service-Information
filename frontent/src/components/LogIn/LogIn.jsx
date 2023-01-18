@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { logInSchema } from 'Validations/FormsValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
@@ -6,7 +6,6 @@ import { useNavigate  } from 'react-router-dom';
 import md5 from 'md5';
 import ReCAPTCHA from 'react-google-recaptcha';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {useState,useEffect} from 'react';
 import './LogIn.css';
 
 const LogIn = () => {
@@ -20,18 +19,17 @@ const LogIn = () => {
     useEffect(() => {
         // Check for a stored session in local storage
         const storedSession = localStorage.getItem('session');
-        console.log("20");
         if (storedSession) {
-            console.log("21");
-          // If the session is stored, fill in the username and password
-          const session = JSON.parse(storedSession);
-          console.log("22");
-          if(session.rememberMe)
-          {
-			navigate('/signUp');
-          }
+            // If the session is stored, fill in the username and password
+            const session = JSON.parse(storedSession);
+            if(session.rememberMe)
+            {
+		        // navigate('/signUp');
+                navigate('/dashboard');
+            }
         }
       }, []); // Only run this effect once
+
     const handleClickForgotPassword = () => {
         navigate('/forgotPassword');
     };
@@ -40,8 +38,12 @@ const LogIn = () => {
         navigate('/signUp');
     };
 
-    const handleClickHome = () => {
-        navigate('/');
+    // const handleClickHome = () => {
+    //     navigate('/');
+    // };
+
+    const handleClickDashboard = () => {
+        navigate('/dashboard');
     };
     
     const { register, handleSubmit, formState: { errors }} = useForm({
@@ -52,9 +54,10 @@ const LogIn = () => {
     const submitForm = async (data, e) => {
 		const storedSession = localStorage.getItem('session');
         e.preventDefault();
-       if (storedSession){
-            navigate('/signUp');
-       }
+        if (storedSession){
+            // navigate('/signUp');
+            navigate('/dashboard');
+        }
         const token = captchaRef.current.getValue();
         captchaRef.current.reset();
 
@@ -77,8 +80,6 @@ const LogIn = () => {
             return;
         }
 
-        
-	   
         const requestMsg = {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -108,16 +109,15 @@ const LogIn = () => {
         } 
         console.log(data);
 
-        handleClickHome();
+        // handleClickHome();
+        handleClickDashboard();
     };
     
     return (
         <div className="container">
 
             <div className="row justify-content-center">
-
                 <div className="col-xl-10 col-lg-12 col-md-9">
-
                     <div className="card o-hidden border-0 shadow-lg my-5">
                         <div className="card-body p-0">
                             <div className="row">
