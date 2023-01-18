@@ -1,10 +1,9 @@
 import React, { useRef } from 'react';
 import { useNavigate  } from 'react-router-dom';
 import { signUpSchema } from 'Validations/FormsValidation';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import ReCAPTCHA from "react-google-recaptcha";
+import ReCAPTCHA from 'react-google-recaptcha';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './SignUp.css';
 import '../../css/sb-admin-2.css';
@@ -13,12 +12,7 @@ const SignUp = () => {
 
     const navigate = useNavigate();
 
-    // const [isReCAPTCHVerified, setIsReCAPTCHVerified] = React.useState(false);
-
     const captchaRef = useRef(null);
-    
-    // create a variable to store the component instance
-    let recaptchaInstance;
     
     const handleClickHome = () => {
         navigate('/');
@@ -33,16 +27,7 @@ const SignUp = () => {
         mode: "onChange"
     });
 
-    // const handleOnChangeRecaptcha = (value) => {
-    //     console.log("Captcha value:", value);
-    //     setIsReCAPTCHVerified(true);
-    // };
-
     const submitForm = async (data, e) => {
-        // if(!isReCAPTCHVerified) {
-        //     alert('Please verify that you are not a robot');
-        //     return;
-        // }
         e.preventDefault();
         const token = captchaRef.current.getValue();
         captchaRef.current.reset();
@@ -141,7 +126,6 @@ const SignUp = () => {
                                     </div>
                                     <center className='margin-bottom-ReCAPTCHA'><ReCAPTCHA
                                         sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
-                                        // onChange={handleOnChangeRecaptcha}
                                         ref={captchaRef}
                                     /></center>
                                     <input type="submit" className="btn btn-primary btn-user btn-block" value={'Register Account'}></input>

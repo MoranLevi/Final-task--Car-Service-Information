@@ -112,7 +112,7 @@ app.post('/signUp', (req, res) => {
             }
 
             /* Insert new user */
-            let query = `INSERT INTO ${USERS_TABLE.name} VALUES ('${req.body.email}','${req.body.firstName}', '${req.body.lastName}', '${req.body.password}', '${req.body.connected}', 0)`
+            let query = `INSERT INTO ${USERS_TABLE.name} VALUES ('${req.body.email}','${req.body.firstName}', '${req.body.lastName}', '${req.body.password}', '${req.body.connected}')`
             console.log(query)
             databaseConnection.query(query,
                 (err, result) => {

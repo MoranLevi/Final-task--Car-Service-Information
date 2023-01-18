@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { logInSchema } from 'Validations/FormsValidation';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate  } from 'react-router-dom';
+import ReCAPTCHA from 'react-google-recaptcha';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './LogIn.css';
 
 const LogIn = () => {
+
     const navigate = useNavigate();
+
+    const captchaRef = useRef(null);
 
     const handleClickForgotPassword = () => {
         navigate('/forgotPassword');
@@ -27,7 +30,29 @@ const LogIn = () => {
         mode: "onChange"
     });
 
-    const submitForm = async (data) => {
+    const submitForm = async (data, e) => {
+        e.preventDefault();
+        const token = captchaRef.current.getValue();
+        captchaRef.current.reset();
+
+        const reCAPTCHMsg = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(
+                {
+                    title:     'reCAPTCHA',
+                    token:     token
+                })
+        };
+        
+        console.log("requesting");
+
+        const reCaptchaResponse = await fetch('/reCaptchaValidation', reCAPTCHMsg)
+        console.log(reCaptchaResponse);
+        if (!reCaptchaResponse.ok) {
+            alert('ReCAPTCHA verification failed');
+            return;
+        }
 
         const requestMsg = {
             method: 'POST',
@@ -39,6 +64,7 @@ const LogIn = () => {
                     password: data.password,
                 })
         };
+
         console.log("requesting");
 
         const response = await fetch('/logIn', requestMsg);
@@ -90,6 +116,10 @@ const LogIn = () => {
                                                         Me</label>
                                                 </div>
                                             </div>
+                                            <center className='margin-bottom-ReCAPTCHA'><ReCAPTCHA
+                                                sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                                                ref={captchaRef}
+                                            /></center>
                                             <input type="submit" className="btn btn-primary btn-user btn-block" value={'Login'}></input>
                                             <hr/>
                                         </form>
