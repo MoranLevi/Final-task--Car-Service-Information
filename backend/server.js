@@ -160,7 +160,6 @@ app.post('/forgotPassword', (req, res) => {
         (err, result) => {
             if (err) {
                 res.status(500)
-                console.log("120")
                 res.send(err)
                 return
             }
@@ -317,6 +316,23 @@ app.post('/reCaptchaValidation', async (req, res) => {
     //             return
     //         }
     // });
+})
+
+app.get('/getCarsData', (req, res) => {
+    console.log(`GET cars table`)
+
+    // res.header('Access-Control-Allow-Origin', '*')
+    var query = `SELECT * FROM ${CARS_TABLE.name}`
+    databaseConnection.query(query, (err, result) => {
+        if (err) {
+            // res.status(500)
+            // res.send(err)
+            //     return
+            console.log(err)
+            throw err
+        }
+        res.send(result)
+    })
 })
 
 app.listen(port, () => {

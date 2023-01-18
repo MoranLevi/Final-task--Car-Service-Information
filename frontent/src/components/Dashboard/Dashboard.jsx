@@ -1,12 +1,16 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { useNavigate  } from 'react-router-dom';
 import ReactTable from '../ReactTable/ReactTable';
+import imageProfile from '../../images/profile-icon.png';
+import imageEdit from '../../images/edit-car-image.png';
+import imageDelete from '../../images/delete-car-image.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Dashboard.css';
 
 const Dashboard = () => {
     
     const navigate = useNavigate();
+    const [carsTableData, setCarsTableData] = useState([]);
 
     useEffect(() => {
         // Check for a stored session in local storage
@@ -14,26 +18,16 @@ const Dashboard = () => {
         if (!storedSession) {
             navigate('*');
         }
-    }, []); // Only run this effect once
 
-    const tempData = [
-        {
-            "treatmentNumber": 117,
-            "treatmentInformation": 'TestTamir',
-            "date": 1,
-            "workerEmail": 'TestTamir',
-            "carNumber": 1,
-            "action": 'TestTamir'
-        },
-        {
-            "treatmentNumber": 117,
-            "treatmentInformation": 'TestTamir',
-            "date": 1,
-            "workerEmail": 'TestTamir',
-            "carNumber": 1,
-            "action": 'TestTamir'
-        },
-    ];
+        async function fetchData() {
+            const response = await fetch('/getCarsData');
+            const json = await response.json();
+            setCarsTableData(json);
+            console.log(json);
+        }
+        fetchData();
+
+    }, []); // Only run this effect once
 
     const tableColumns = useMemo(
         () => [
@@ -43,11 +37,11 @@ const Dashboard = () => {
             },
             {
                 Header: 'Treatment Informaton',
-                accessor: 'treatmentInformation',
+                accessor: 'treatmentInfo',
             },
             {
                 Header: 'Date',
-                accessor: 'date',
+                accessor: 'dateT',
             },
             {
                 Header: 'Worker Email',
@@ -60,6 +54,17 @@ const Dashboard = () => {
             {
                 Header: 'Action',
                 accessor: 'action',
+                Cell: row => (
+                    <div>
+                        <button onClick={() => console.log('Button clicked for row', row)} className='button-image'>
+                            <img src={imageEdit} alt="image-button" style={{ width: '30px', height: '30px' }}/>
+                        </button>
+                        <button onClick={() => console.log('Button clicked for row', row)} className='button-image'>
+                            <img src={imageDelete} alt="image-button" style={{ width: '30px', height: '30px' }}/>
+                        </button>
+                    </div>
+                    
+                )
             }
         ],
         [],
@@ -90,8 +95,7 @@ const Dashboard = () => {
                                     <a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <span className="mr-2 d-none d-lg-inline text-gray-600 big">Douglas McGee</span>
-                                        <img className="img-profile rounded-circle"
-                                            src="../../images/profile-icon.png"/>
+                                        <img className="img-profile rounded-circle" src={imageProfile} style={{ width: '45px', height: '40px' }}/>
                                     </a>
                                     {/* Dropdown - User Information */}
                                     <div className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -124,9 +128,9 @@ const Dashboard = () => {
 
                             {/* Page Heading */}
                             <h1 className="h3 mb-2 text-gray-800">Car Service Table</h1>
-                            <p className="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
+                            {/* <p className="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
                                 For more information about DataTables, please visit the <a target="_blank"
-                                    href="https://datatables.net">official DataTables documentation</a>.</p>
+                                    href="https://datatables.net">official DataTables documentation</a>.</p> */}
 
                             {/* DataTales Example */}
                             <div className="card shadow mb-4">
@@ -136,7 +140,7 @@ const Dashboard = () => {
                                 <div className="card-body">
                                     <div className="table-responsive">
                                         <table className="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                            <ReactTable columns={tableColumns} data={tempData} />
+                                            <ReactTable columns={tableColumns} data={carsTableData} />
                                         </table>
                                     </div>
                                 </div>
