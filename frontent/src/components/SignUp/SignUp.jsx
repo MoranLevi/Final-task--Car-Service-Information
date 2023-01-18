@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useNavigate  } from 'react-router-dom';
 import { signUpSchema } from 'Validations/FormsValidation';
 import * as yup from 'yup';
@@ -13,8 +13,13 @@ const SignUp = () => {
 
     const navigate = useNavigate();
 
-    const [isReCAPTCHVerified, setIsReCAPTCHVerified] = React.useState(false);
+    // const [isReCAPTCHVerified, setIsReCAPTCHVerified] = React.useState(false);
 
+    const captchaRef = useRef(null);
+    
+    // create a variable to store the component instance
+    let recaptchaInstance;
+    
     const handleClickHome = () => {
         navigate('/');
     };
@@ -28,17 +33,39 @@ const SignUp = () => {
         mode: "onChange"
     });
 
-    const handleOnChangeRecaptcha = (value) => {
-        console.log("Captcha value:", value);
-        setIsReCAPTCHVerified(true);
-    };
+    // const handleOnChangeRecaptcha = (value) => {
+    //     console.log("Captcha value:", value);
+    //     setIsReCAPTCHVerified(true);
+    // };
 
-    const submitForm = async (data) => {
-        if(!isReCAPTCHVerified) {
-            alert('Please verify that you are not a robot');
+    const submitForm = async (data, e) => {
+        // if(!isReCAPTCHVerified) {
+        //     alert('Please verify that you are not a robot');
+        //     return;
+        // }
+        e.preventDefault();
+        const token = captchaRef.current.getValue();
+        captchaRef.current.reset();
+
+        const reCAPTCHMsg = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(
+                {
+                    title:     'reCAPTCHA',
+                    token:     token
+                })
+        };
+        
+        console.log("requesting");
+
+        const reCaptchaResponse = await fetch('/reCaptchaValidation', reCAPTCHMsg)
+        console.log(reCaptchaResponse);
+        if (!reCaptchaResponse.ok) {
+            alert('ReCAPTCHA verification failed');
             return;
         }
-        
+
         const requestMsg = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -113,8 +140,9 @@ const SignUp = () => {
                                         </div>
                                     </div>
                                     <center className='margin-bottom-ReCAPTCHA'><ReCAPTCHA
-                                        sitekey="6LfbiPYjAAAAAHwsUIOaDh0FDT_r4rJoLBUMpkAp"
-                                        onChange={handleOnChangeRecaptcha}
+                                        sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                                        // onChange={handleOnChangeRecaptcha}
+                                        ref={captchaRef}
                                     /></center>
                                     <input type="submit" className="btn btn-primary btn-user btn-block" value={'Register Account'}></input>
                                     {/* <input type="submit" className="btn btn-primary btn-user btn-block" value={'Register Account'} disabled={!isReCAPTCHVerified}></input> */}
