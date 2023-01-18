@@ -335,6 +335,17 @@ app.get('/getCarsData', (req, res) => {
     })
 })
 
+app.post('/deleteCar', (req, res) => {
+    // res.header('Access-Control-Allow-Origin', '*')
+    const query = `Delete FROM ${CARS_TABLE.name} WHERE ${CARS_TABLE.columns.treatmentNumber} = ?`
+    databaseConnection.query(query, [req.body.treatmentNumber], (err, result) => {
+        if (err) {
+            throw err
+        }
+        res.send(result)
+    })
+})
+
 app.listen(port, () => {
     console.log(`Car-Service server listening on http://localhost:${port}`)
 })

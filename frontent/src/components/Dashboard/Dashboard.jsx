@@ -29,6 +29,18 @@ const Dashboard = () => {
 
     }, []); // Only run this effect once
 
+    const onClickDelete = async (row) => {
+        console.log('Delete button clicked', row.values.treatmentNumber);
+        await fetch('/deleteCar', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                treatmentNumber:   row.original.treatmentNumber,
+            })
+        })
+       window.location.reload(false)
+    }
+
     const tableColumns = useMemo(
         () => [
             {
@@ -59,11 +71,11 @@ const Dashboard = () => {
                         <button onClick={() => console.log('Button clicked for row', row)} className='button-image'>
                             <img src={imageEdit} alt="image-button" style={{ width: '30px', height: '30px' }}/>
                         </button>
+                        {/* <button onClick={onClickDelete(row)} className='button-image'> */}
                         <button onClick={() => console.log('Button clicked for row', row)} className='button-image'>
                             <img src={imageDelete} alt="image-button" style={{ width: '30px', height: '30px' }}/>
                         </button>
-                    </div>
-                    
+                    </div>     
                 )
             }
         ],
