@@ -5,9 +5,34 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate  } from 'react-router-dom';
+//import { useCookies } from 'react-cookie';
 import './LogIn.css';
 
 const LogIn = () => {
+    //const [customCheck, setRememberMe] = useState(0);
+    //const [cookies, setCookie] = useCookies(['session']);
+    /*new1
+    useEffect(() => {
+        // Check for a stored session in local storage
+        const storedSession = localStorage.getItem('session');
+        if (storedSession) {
+          // If the session is stored, fill in the username and password
+          const session = JSON.parse(storedSession);
+          if(session.customCheck)
+          {
+
+          history('/signUp');
+          }
+        }
+      }, []); // Only run this effect once
+
+      const onChange=(value)=> {
+        setReCAPTCHAValue(value);
+    }
+
+    if (customCheck) {
+        localStorage.setItem('session', JSON.stringify({customCheck}));
+    }*/
     const navigate = useNavigate();
 
     const handleClickForgotPassword = () => {
@@ -54,7 +79,12 @@ const LogIn = () => {
         console.log(data);
         handleClickHome();
     };
-
+    /*const SignOUT=(rememberMe)  => {
+        window.localStorage.removeItem("isLoggedIn");
+    };*/
+    /*const setRememberMe=(rememberMe)  => {
+        window.localStorage.setItem("isLoggedIn",true);
+    };*/
     return (
         <div className="container">
 
@@ -73,19 +103,19 @@ const LogIn = () => {
                                         </div>
                                         <form className="user" onSubmit={handleSubmit(submitForm)}>
                                             <div className="form-group">
-                                                <input type="email" className="form-control form-control-user"
+                                                <input id="email" type="email" className="form-control form-control-user"
                                                     name="email" aria-describedby="emailHelp"
                                                     placeholder="Enter Email Address..." {...register('email')}/>
                                                 {errors.email ? <p className='error-msg'>{errors.email?.message}</p> : <br/>}
                                             </div>
                                             <div className="form-group">
-                                                <input type="password" className="form-control form-control-user"
+                                                <input id="password" type="password" className="form-control form-control-user"
                                                     name="password" placeholder="Password" {...register('password')}/>
                                                 {errors.password ? <p className='error-msg'>{errors.password?.message}</p> : <br/>}
                                             </div>
                                             <div className="form-group">
                                                 <div className="custom-control custom-checkbox small">
-                                                    <input type="checkbox" className="custom-control-input" id="customCheck"/>
+                                                    <input type="checkbox" className="custom-control-input" id="customCheck" /*checked={rememberMe} onChange={(event) => setRememberMe(event.target.checked)}*//>
                                                     <label className="custom-control-label remember-me-label" htmlFor="customCheck">Remember
                                                         Me</label>
                                                 </div>
