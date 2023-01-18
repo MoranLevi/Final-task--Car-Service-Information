@@ -6,35 +6,30 @@ import { useForm } from 'react-hook-form';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate  } from 'react-router-dom';
 //import { useCookies } from 'react-cookie';
+import {useState,useEffect} from 'react';
 import './LogIn.css';
 
 const LogIn = () => {
-    //const [customCheck, setRememberMe] = useState(0);
-    //const [cookies, setCookie] = useCookies(['session']);
-    /*new1
+    const navigate = useNavigate();
+    const [rememberMe, setRememberMe] = useState(0);
+    
+    
     useEffect(() => {
         // Check for a stored session in local storage
         const storedSession = localStorage.getItem('session');
+        console.log("20");
         if (storedSession) {
+            console.log("21");
           // If the session is stored, fill in the username and password
           const session = JSON.parse(storedSession);
-          if(session.customCheck)
+          console.log("22");
+          if(session.rememberMe)
           {
 
-          history('/signUp');
+          navigate('/signUp');
           }
         }
       }, []); // Only run this effect once
-
-      const onChange=(value)=> {
-        setReCAPTCHAValue(value);
-    }
-
-    if (customCheck) {
-        localStorage.setItem('session', JSON.stringify({customCheck}));
-    }*/
-    const navigate = useNavigate();
-
     const handleClickForgotPassword = () => {
         navigate('/forgotPassword');
     };
@@ -52,8 +47,13 @@ const LogIn = () => {
         mode: "onChange"
     });
 
-    const submitForm = async (data) => {
-
+    const submitForm = async (data,event) => {
+        const storedSession = localStorage.getItem('session');
+        event.preventDefault();
+       if (storedSession){
+            navigate('/signUp');
+       }
+       
         const requestMsg = {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -70,21 +70,19 @@ const LogIn = () => {
 
         if (!response.ok) {
             alert('Invalid Login Details');
+            localStorage.clear();
             return;
         }
         let responseData = await response.json();
         responseData = JSON.parse(responseData.body);
         console.log(responseData)
-            
+        if (rememberMe) {
+            localStorage.setItem('session', JSON.stringify({rememberMe}));
+        } 
         console.log(data);
         handleClickHome();
     };
-    /*const SignOUT=(rememberMe)  => {
-        window.localStorage.removeItem("isLoggedIn");
-    };*/
-    /*const setRememberMe=(rememberMe)  => {
-        window.localStorage.setItem("isLoggedIn",true);
-    };*/
+    
     return (
         <div className="container">
 
@@ -115,7 +113,7 @@ const LogIn = () => {
                                             </div>
                                             <div className="form-group">
                                                 <div className="custom-control custom-checkbox small">
-                                                    <input type="checkbox" className="custom-control-input" id="customCheck" /*checked={rememberMe} onChange={(event) => setRememberMe(event.target.checked)}*//>
+                                                    <input type="checkbox" className="custom-control-input" id="customCheck" checked={rememberMe} onChange={(event) => setRememberMe(event.target.checked)}/>
                                                     <label className="custom-control-label remember-me-label" htmlFor="customCheck">Remember
                                                         Me</label>
                                                 </div>

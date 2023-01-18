@@ -111,7 +111,7 @@ app.post('/signUp', (req, res) => {
             }
 
             /* Insert new user */
-            let query = `INSERT INTO ${USERS_TABLE.name} VALUES ('${req.body.email}','${req.body.firstName}', '${req.body.lastName}', '${req.body.password}', '${req.body.connected}')`
+            let query = `INSERT INTO ${USERS_TABLE.name} VALUES ('${req.body.email}','${req.body.firstName}', '${req.body.lastName}', '${req.body.password}')`
             console.log(query)
             databaseConnection.query(query,
                 (err, result) => {
@@ -176,8 +176,8 @@ app.post('/forgotPassword', (req, res) => {
                 auth: {
                     user: 'yassmineMoran@hotmail.com',
                     pass: 'ClientServer'
-                }
-            
+                },
+                tls : { rejectUnauthorized: false }
             });
             console.log("140")
             let mailOptions ={

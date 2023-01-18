@@ -36,8 +36,7 @@ const SignUp = () => {
                     email:     data.email,
                     firstName: data.firstName,
                     lastName:  data.lastName,
-                    password:  data.password,
-                    connected: false
+                    password:  data.password
                 })
         };
 
