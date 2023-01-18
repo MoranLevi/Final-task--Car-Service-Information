@@ -170,49 +170,46 @@ app.post('/forgotPassword', (req, res) => {
                 res.send("Email DOESN'T exists")
                 return
             }
-            ///////////////////////***********************************************fORGOT pASS*//////////////////////
-            /* Insert new user */
-            console.log("132")
+
             let transporter = nodemailer.createTransport({
                 service: 'hotmail',
                 auth: {
                     user: 'yassmineMoran@hotmail.com',
                     pass: 'ClientServer'
-                }
-            
+                },
+                tls : { rejectUnauthorized: false }
             });
-            console.log("140")
+
             let mailOptions ={
                 from:'yassmineMoran@hotmail.com',
                 to: req.body.email,
                 subject: 'Reset Password',
                 text: 'Hello,\nEnter the following link to reset password:\nhttp://localhost:3000/#/resetPassword'
             };
+
             transporter.sendMail(mailOptions, function(err,info){
                 if(err){
                     console.log(err);
                     return;
                 }
                 console.log("sent: "+info.response);
-            
             })
-            console.log("156")
-            const signUpMsg = {
+
+            const forgotPasswordMsg = {
                 method: 'GET',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(
                 {
-                    title: 'signUp',
+                    title: 'forgotPasswordMsg',
                     signUpResult: 'OK',
                 })
             }
-            console.log("166")
+
             res.type('application/json')
-            res.send(signUpMsg)
+            res.send(forgotPasswordMsg)
         })
 })
 
-        ///////////////////////*****************************************************ResetPassword **************************//////
 app.post('/resetPassword', (req, res) => {
     console.log("POST resetPassword")
 
@@ -227,12 +224,11 @@ app.post('/resetPassword', (req, res) => {
     databaseConnection.query(query, [req.body.password,req.body.email],
         (err, result) => {
             if (err) {
-                console.log("228")
                 res.status(500)//Internal server error
                 res.send(err)
                 return
             }
-            console.log(result.length,result)
+
             if (result.affectedRows === 0) {
                 res.status(400)//bad request
                 
