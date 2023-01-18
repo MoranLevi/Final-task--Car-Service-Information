@@ -155,7 +155,6 @@ app.post('/reCaptchaValidation', async (req, res) => {
 
     //Destructuring response token from request body
     const token = req.body.token;
-    const secret_key = '6LfbiPYjAAAAAKzLSvFe0_Go-hVIl74KrfFKCXYm';
 
     await axios.post(
         `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`
@@ -212,38 +211,6 @@ app.post('/reCaptchaValidation', async (req, res) => {
     //             return
     //         }
     // });
-
-    // await fetch(`https://www.google.com/recaptcha/api/siteverify?secret=${process.env.SECRET_KEY}&response=${token}`)
-
-    // const query = `SELECT * FROM ${USERS_TABLE.name} WHERE ${USERS_TABLE.columns.email} = ? AND ${USERS_TABLE.columns.password} = ?`
-    // databaseConnection.query(query, [req.body.email, req.body.password],
-    //     (err, result) => {
-    //         if (err) {
-    //             res.status(500)//Internal server error
-    //             res.send(err)
-    //             return
-    //         }
-
-    //         if (result.length === 0) {
-    //             res.status(400)//bad request
-    //             res.send("Invalid login parameters.")
-    //             return
-    //         }
-
-    //         const resMsg = {
-    //             method: 'GET',
-    //             headers: {'Content-Type': 'application/json'},
-    //             body: JSON.stringify(
-    //                 {
-    //                     title: 'LogIn',
-    //                     loginResult: 'OK',
-    //                     firstName: result[0].firstName,
-    //                     lastName:  result[0].lastName,
-    //                 })
-    //         }
-    //         res.type('application/json')
-    //         res.send(resMsg)
-    //     })
 })
 
 app.listen(port, () => {
