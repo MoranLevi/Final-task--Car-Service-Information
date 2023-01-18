@@ -2,6 +2,8 @@ const mysql = require('mysql')
 const express = require('express')
 const cors = require('cors');
 const nodemailer =require('nodemailer');
+const axios = require('axios');
+const dotenv = require('dotenv').config()
 const { USERS_TABLE, CARS_TABLE } = require('./DatabaseTables')
 
 const app = express()
@@ -211,8 +213,8 @@ app.post('/forgotPassword', (req, res) => {
         })
 
         ///////////////////////*****************************************************ResetPassword **************************//////
-    app.post('/resetPassword', (req, res) => {
-            console.log("POST resetPassword")
+app.post('/resetPassword', (req, res) => {
+    console.log("POST resetPassword")
 
     if (req.body.title !== "ResetPassword") {
         res.status(400)
@@ -250,9 +252,109 @@ app.post('/forgotPassword', (req, res) => {
             res.type('application/json')
             res.send(resetPasswordMsg)
         })
-        })
+})
 
+app.post('/reCaptchaValidation', async (req, res) => {
+    console.log("POST reCAPTCHA")
 
+    if (req.body.title !== "reCAPTCHA") {
+        res.status(400)
+        res.send("Bad Login Request.")
+        return
+    }
+
+    //Destructuring response token from request body
+    const token = req.body.token;
+    const secret_key = '6LfbiPYjAAAAAKzLSvFe0_Go-hVIl74KrfFKCXYm';
+
+    await axios.post(
+        `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`
+    );
+
+    if (res.status(200)) {
+        console.log('reCAPTCHA verification succeeded');
+        const reCAPTCHAMsg = {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(
+            {
+                title: 'reCAPTCHA',
+                signUpResult: 'OK',
+            })
+        }
+        res.type('application/json')
+        res.send(reCAPTCHAMsg)
+        return
+    }else{
+        console.log('reCAPTCHA verification failed');
+        res.status(400)
+        res.send("ReCAPTCHA verification failed")
+        return
+    }
+
+    // await fetch('https://www.google.com/recaptcha/api/siteverify', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/x-www-form-urlencoded',
+    //     },
+    //     body: `secret=${secret_key}&response=${token}`,
+    //     })
+    //     .then(response => response.json())
+    //     .then(json => {
+    //         if (json.success) {
+    //             console.log('reCAPTCHA verification succeeded');
+    //             const reCAPTCHAMsg = {
+    //                 method: 'GET',
+    //                 headers: {'Content-Type': 'application/json'},
+    //                 body: JSON.stringify(
+    //                     {
+    //                         title: 'reCAPTCHA',
+    //                         signUpResult: 'OK',
+    //                     })
+    //             }
+    //             res.type('application/json')
+    //             res.send(reCAPTCHAMsg)
+    //             return
+    //         } else {
+    //             console.log('reCAPTCHA verification failed');
+    //             res.status(400)
+    //             res.send("ReCAPTCHA verification failed")
+    //             return
+    //         }
+    // });
+
+    // await fetch(`https://www.google.com/recaptcha/api/siteverify?secret=${process.env.SECRET_KEY}&response=${token}`)
+
+    // const query = `SELECT * FROM ${USERS_TABLE.name} WHERE ${USERS_TABLE.columns.email} = ? AND ${USERS_TABLE.columns.password} = ?`
+    // databaseConnection.query(query, [req.body.email, req.body.password],
+    //     (err, result) => {
+    //         if (err) {
+    //             res.status(500)//Internal server error
+    //             res.send(err)
+    //             return
+    //         }
+
+    //         if (result.length === 0) {
+    //             res.status(400)//bad request
+    //             res.send("Invalid login parameters.")
+    //             return
+    //         }
+
+    //         const resMsg = {
+    //             method: 'GET',
+    //             headers: {'Content-Type': 'application/json'},
+    //             body: JSON.stringify(
+    //                 {
+    //                     title: 'LogIn',
+    //                     loginResult: 'OK',
+    //                     firstName: result[0].firstName,
+    //                     lastName:  result[0].lastName,
+    //                 })
+    //         }
+    //         res.type('application/json')
+    //         res.send(resMsg)
+    //     })
+})
 
 app.listen(port, () => {
     console.log(`Car-Service server listening on http://localhost:${port}`)

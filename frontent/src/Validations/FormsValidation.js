@@ -10,13 +10,19 @@ export const signUpSchema = yup.object().shape({
     firstName: yup.string().required('First name is required').test('is-letters-only', 'First name can only contain letters', checkIfOnlyLetters),
     lastName: yup.string().required('Last name is required').test('is-letters-only', 'Last name can only contain letters', checkIfOnlyLetters),
     email: yup.string().email('Invalid email').required('Email is required'),
-    password: yup.string().min(6, 'Password must be at least 6 chars').required('Password is required'),
+    password: yup.string().min(6, 'Password must be at least 6 chars').matches(/[A-Z]/, 'Must include an uppercase character')  
+        .matches(/[a-z]/, 'Must include a lowercase character').matches(/\d/, 'Must include a number')
+        .matches(/[!@#\$%\^&\*\(\)\-_\=\+\\\|\[\]\{\};':\"\/<>,\.\?`~]+/, 'Must include a special character')
+        .required('Password is required'),
     repeatPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match').required('Confirm password is required')
 });
 
 export const logInSchema = yup.object().shape({
     email: yup.string().email('Invalid email').required('Email is required'),
-    password: yup.string().min(6, 'Password must be at least 6 chars').required('Password is required'),
+    password: yup.string().min(6, 'Password must be at least 6 chars').matches(/[A-Z]/, 'Must include an uppercase character')
+        .matches(/[a-z]/, 'Must include a lowercase character').matches(/\d/, 'Must include a number')
+        .matches(/[!@#\$%\^&\*\(\)\-_\=\+\\\|\[\]\{\};':\"\/<>,\.\?`~]+/, 'Must include a special character')
+        .required('Password is required'),
 });
 
 export const forgotPasswordSchema = yup.object().shape({
