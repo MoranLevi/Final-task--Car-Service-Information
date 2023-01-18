@@ -61,8 +61,7 @@ const SignUp = () => {
                     email:     data.email,
                     firstName: data.firstName,
                     lastName:  data.lastName,
-                    password:  md5(data.password),
-                    connected: 0
+                    password:  md5(data.password)
                 })
         };
 

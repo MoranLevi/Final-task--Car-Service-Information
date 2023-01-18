@@ -6,14 +6,32 @@ import { useNavigate  } from 'react-router-dom';
 import md5 from 'md5';
 import ReCAPTCHA from 'react-google-recaptcha';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {useState,useEffect} from 'react';
 import './LogIn.css';
 
 const LogIn = () => {
 
     const navigate = useNavigate();
-
+    const [rememberMe, setRememberMe] = useState(0);
+    
+    
     const captchaRef = useRef(null);
-
+	
+    useEffect(() => {
+        // Check for a stored session in local storage
+        const storedSession = localStorage.getItem('session');
+        console.log("20");
+        if (storedSession) {
+            console.log("21");
+          // If the session is stored, fill in the username and password
+          const session = JSON.parse(storedSession);
+          console.log("22");
+          if(session.rememberMe)
+          {
+			navigate('/signUp');
+          }
+        }
+      }, []); // Only run this effect once
     const handleClickForgotPassword = () => {
         navigate('/forgotPassword');
     };
@@ -32,7 +50,11 @@ const LogIn = () => {
     });
 
     const submitForm = async (data, e) => {
+		const storedSession = localStorage.getItem('session');
         e.preventDefault();
+       if (storedSession){
+            navigate('/signUp');
+       }
         const token = captchaRef.current.getValue();
         captchaRef.current.reset();
 
@@ -55,6 +77,8 @@ const LogIn = () => {
             return;
         }
 
+        
+	   
         const requestMsg = {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -72,15 +96,21 @@ const LogIn = () => {
 
         if (!response.ok) {
             alert('Invalid Login Details');
+            localStorage.clear();
             return;
         }
         let responseData = await response.json();
         responseData = JSON.parse(responseData.body);
         console.log(responseData)
-            
+
+        if (rememberMe) {
+            localStorage.setItem('session', JSON.stringify({rememberMe}));
+        } 
+        console.log(data);
+
         handleClickHome();
     };
-
+    
     return (
         <div className="container">
 
@@ -99,19 +129,19 @@ const LogIn = () => {
                                         </div>
                                         <form className="user" onSubmit={handleSubmit(submitForm)}>
                                             <div className="form-group">
-                                                <input type="email" className="form-control form-control-user"
+                                                <input id="email" type="email" className="form-control form-control-user"
                                                     name="email" aria-describedby="emailHelp"
                                                     placeholder="Enter Email Address..." {...register('email')}/>
                                                 {errors.email ? <p className='error-msg'>{errors.email?.message}</p> : <br/>}
                                             </div>
                                             <div className="form-group">
-                                                <input type="password" className="form-control form-control-user"
+                                                <input id="password" type="password" className="form-control form-control-user"
                                                     name="password" placeholder="Password" {...register('password')}/>
                                                 {errors.password ? <p className='error-msg'>{errors.password?.message}</p> : <br/>}
                                             </div>
                                             <div className="form-group">
                                                 <div className="custom-control custom-checkbox small">
-                                                    <input type="checkbox" className="custom-control-input" id="customCheck"/>
+                                                    <input type="checkbox" className="custom-control-input" id="customCheck" checked={rememberMe} onChange={(event) => setRememberMe(event.target.checked)}/>
                                                     <label className="custom-control-label remember-me-label" htmlFor="customCheck">Remember
                                                         Me</label>
                                                 </div>
