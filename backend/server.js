@@ -1,6 +1,7 @@
 const mysql = require('mysql')
 const express = require('express')
 const cors = require('cors');
+const nodemailer =require('nodemailer');
 const axios = require('axios');
 const dotenv = require('dotenv').config()
 const { USERS_TABLE, CARS_TABLE } = require('./DatabaseTables')
@@ -141,6 +142,115 @@ app.post('/signUp', (req, res) => {
                     res.type('application/json')
                     res.send(signUpMsg)
                 })
+        })
+})
+
+app.post('/forgotPassword', (req, res) => {
+    console.log("POST Forgot")
+
+    if (req.body.title !== "ForgotPassword") {
+        res.status(400)
+        res.send("Bad Request.")
+        return
+    }
+
+    /* Check if user already exist */
+    const query = `SELECT * FROM ${USERS_TABLE.name} WHERE ${USERS_TABLE.columns.email} = ?`
+    databaseConnection.query(query, [req.body.email],
+        (err, result) => {
+            if (err) {
+                res.status(500)
+                console.log("120")
+                res.send(err)
+                return
+            }
+            if (result.length == 0) {
+                res.status(400)
+                console.log("125")
+                res.send("Email DOESN'T exists")
+                return
+            }
+            ///////////////////////***********************************************fORGOT pASS*//////////////////////
+            /* Insert new user */
+            console.log("132")
+            let transporter = nodemailer.createTransport({
+                service: 'hotmail',
+                auth: {
+                    user: 'yassmineMoran@hotmail.com',
+                    pass: 'ClientServer'
+                }
+            
+            });
+            console.log("140")
+            let mailOptions ={
+                from:'yassmineMoran@hotmail.com',
+                to: req.body.email,
+                subject: 'Reset Password',
+                text: 'Hello,\nEnter the following link to reset password:\nhttp://localhost:3000/#/resetPassword'
+            };
+            transporter.sendMail(mailOptions, function(err,info){
+                if(err){
+                    console.log(err);
+                    return;
+                }
+                console.log("sent: "+info.response);
+            
+            })
+            console.log("156")
+                    const signUpMsg = {
+                        method: 'GET',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(
+                            {
+                                title: 'signUp',
+                                signUpResult: 'OK',
+                            })
+                    }
+                    console.log("166")
+                    res.type('application/json')
+                    res.send(signUpMsg)
+                })
+        })
+
+        ///////////////////////*****************************************************ResetPassword **************************//////
+app.post('/resetPassword', (req, res) => {
+    console.log("POST resetPassword")
+
+    if (req.body.title !== "ResetPassword") {
+        res.status(400)
+        res.send("Bad Reset Password Request.")
+        return
+    }
+
+    //const query = `SELECT * FROM ${USERS_TABLE.name} WHERE ${USERS_TABLE.columns.email} = ? AND ${USERS_TABLE.columns.password} = ?`
+    const query = `UPDATE ${USERS_TABLE.name} SET ${USERS_TABLE.columns.password} = ? WHERE ${USERS_TABLE.columns.email} = ?`
+    databaseConnection.query(query, [req.body.password,req.body.email],
+        (err, result) => {
+            if (err) {
+                console.log("228")
+                res.status(500)//Internal server error
+                res.send(err)
+                return
+            }
+            console.log(result.length,result)
+            if (result.affectedRows === 0) {
+                res.status(400)//bad request
+                
+                res.send("Invalid email parameters.")
+                return
+            }
+
+            const resetPasswordMsg = {
+                method: 'GET',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(
+                    {
+                        title: 'resetPassword',
+                        resetPasswordResult: 'OK',
+                    })
+            }
+            res.type('application/json')
+            res.send(resetPasswordMsg)
         })
 })
 

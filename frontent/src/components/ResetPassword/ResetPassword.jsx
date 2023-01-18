@@ -1,18 +1,15 @@
 import React from 'react';
-import { forgotPasswordSchema } from 'Validations/FormsValidation';
+import {resetPasswordSchema } from 'Validations/FormsValidation';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate  } from 'react-router-dom';
-import './ForgotPassword.css';
+import './ResetPassword.css';
 
-const ForgotPassword = () => {
+const ResetPassword = () => {
     const navigate = useNavigate();
 
-    const handleClickSignUp = () => {
-        navigate('/signUp');
-    };
 
     const handleClickLogIn = () => {
         navigate('/logIn');
@@ -23,7 +20,7 @@ const ForgotPassword = () => {
     };
 
     const { register, handleSubmit, formState: { errors }} = useForm({
-        resolver: yupResolver(forgotPasswordSchema),
+        resolver: yupResolver(resetPasswordSchema),
         mode: "onChange"
     });
 
@@ -34,13 +31,14 @@ const ForgotPassword = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(
                 {
-                    title:     'ForgotPassword',
-                    email:     data.email
+                    title:     'ResetPassword',
+                    email:        data.email,
+                    password:     data.password
                 })
         };
         console.log("requesting");
 
-        const response = await fetch('/forgotPassword', requestMsg)
+        const response = await fetch('/resetPassword', requestMsg)
         console.log(response);
         if (!response.ok) {
             alert('Invalid Details');
@@ -48,9 +46,9 @@ const ForgotPassword = () => {
         }
         const responseData = await response.json();
         console.log(responseData);
-        alert('Sent! Check your mail.')
+        alert('Updated.')
 
-        handleClickHome();
+        handleClickLogIn();
     };
 
     return (
@@ -66,26 +64,27 @@ const ForgotPassword = () => {
                                 <div class="col-lg-6 d-none d-lg-block bg-password-image"></div>
                                 <div class="col-lg-6">
                                     <div class="p-5">
-                                        <div class="text-center">
-                                            <h1 class="h4 text-gray-900 mb-2">Forgot Your Password?</h1>
-                                            <p class="mb-4 forgot-password-data-label">We get it, stuff happens. Just enter your email address below
-                                                and we'll send you a link to reset your password!</p>
+                                        <div className="text-center">
+                                            <h1 className="h4 text-gray-900 mb-4">Reset Password!</h1>
                                         </div>
                                         <form class="user" onSubmit={handleSubmit(submitForm)}>
                                             <div class="form-group">
                                                 <input type="email" class="form-control form-control-user"
                                                     name="email" aria-describedby="emailHelp"
                                                     placeholder="Enter Email Address..." {...register('email')}/>
-                                                    {errors.email ? <p className='error-msg'>{errors.email?.message}</p> : <br/>}
+                                                {errors.email ? <p className='error-msg'>{errors.email?.message}</p> : <br/>}
+                                                <input type="password" className="form-control form-control-user"
+                                                    name="password" placeholder="Password" {...register('password')}/>
+                                                {errors.password ? <p className='error-msg'>{errors.password?.message}</p> : <br/>}
+                                                <input type="password" className="form-control form-control-user"
+                                                    name="repeatPassword" placeholder="Repeat Password" {...register('repeatPassword')}/>
+                                                {errors.repeatPassword ? <p className='error-msg'>{errors.repeatPassword?.message}</p> : <p className='space2'>{'.'}</p>}
                                             </div>
                                             <input type="submit" className="btn btn-primary btn-user btn-block" value={'Reset Password'}></input>
                                         </form>
                                         <hr/>
                                         <div class="text-center">
-                                            <a class="small cursor-pointer" onClick={handleClickSignUp}>Create an Account!</a>
-                                        </div>
-                                        <div class="text-center">
-                                            <a class="small cursor-pointer" onClick={handleClickLogIn}>Already have an account? Login!</a>
+                                            <a class="small cursor-pointer" onClick={handleClickHome}>Disscare</a>
                                         </div>
                                     </div>
                                 </div>
@@ -101,4 +100,4 @@ const ForgotPassword = () => {
     );
 };
 
-export default ForgotPassword;
+export default ResetPassword;
