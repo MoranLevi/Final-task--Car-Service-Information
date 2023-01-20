@@ -2,3 +2,8 @@
     border: none;
     background: none;
 }
+
+.button-image:hover {
+    background-color: rgb(174, 174, 231);
+    border-radius: 10px;
+}

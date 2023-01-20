@@ -78,7 +78,6 @@ const Dashboard = () => {
                             <img src={imageEdit} alt="image-button" style={{ width: '30px', height: '30px' }}/>
                         </button>
                         <button onClick={(e) => onClickDelete(row.row)} className='button-image'>
-                        {/* <button onClick={() => console.log('Button clicked for row', row.row.original.treatmentNumber)} className='button-image'> */}
                             <img src={imageDelete} alt="image-button" style={{ width: '30px', height: '30px' }}/>
                         </button>
                     </div>     
