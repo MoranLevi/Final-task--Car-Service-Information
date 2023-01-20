@@ -347,6 +347,63 @@ app.post('/deleteCar', (req, res) => {
     })
 })
 
+app.post('/addNewCar', (req, res) => {
+    console.log("POST Add-New-Car")
+
+    if (req.body.title !== "AddNewCar") {
+        res.status(400)
+        res.send("Bad Request.")
+        return
+    }
+
+    /* Check if car treatment already exist */
+    const query = `SELECT * FROM ${CARS_TABLE.name} WHERE ${CARS_TABLE.columns.treatmentNumber} = ?`
+    databaseConnection.query(query, [req.body.treatmentNumber],
+        (err, result) => {
+            if (err) {
+                res.status(500)
+                res.send(err)
+                return
+            }
+            if (result.length !== 0) {
+                res.status(400)
+                res.send("Treatment number already exists")
+                return
+            }
+
+            /* Insert new car treatment */
+            let query = `INSERT INTO ${CARS_TABLE.name} VALUES ('${req.body.treatmentNumber}','${req.body.treatmentInformation}', '${req.body.date}', '${req.body.workerEmail}', '${req.body.carNumber}')`
+            console.log(query)
+            databaseConnection.query(query,
+                (err, result) => {
+                    if (err) {
+                        res.status(500)
+                        res.send(err)
+                        throw err
+                    }
+
+                    if (result.length === 0) {
+                        res.status(400)
+                        res.send("Invalid car parameters.")
+                        return
+                    }
+
+                    const addNewCarMsg = {
+                        method: 'GET',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(
+                            {
+                                title: 'addNewCar',
+                                addNewCarResult: 'OK',
+                            })
+                    }
+
+                    res.type('application/json')
+                    res.send(addNewCarMsg)
+                })
+        })
+})
+
 app.listen(port, () => {
     console.log(`Car-Service server listening on http://localhost:${port}`)
 })
