@@ -336,6 +336,7 @@ app.get('/getCarsData', (req, res) => {
 })
 
 app.post('/deleteCar', (req, res) => {
+    console.log(`Delete car from table`)
     // res.header('Access-Control-Allow-Origin', '*')
     const query = `Delete FROM ${CARS_TABLE.name} WHERE ${CARS_TABLE.columns.treatmentNumber} = ?`
     databaseConnection.query(query, [req.body.treatmentNumber], (err, result) => {

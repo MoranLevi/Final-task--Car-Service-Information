@@ -24,7 +24,7 @@ const Dashboard = () => {
         if (!storedConnected) {
             navigate('*');
         }
-
+        
         async function fetchData() {
             const response = await fetch('/getCarsData');
             const json = await response.json();
@@ -35,25 +35,16 @@ const Dashboard = () => {
 
     }, []); // Only run this effect once
 
-    // useMemo (() => {
-    //     const storedUser = localStorage.getItem('user');
-    //     if(!storedUser) {
-    //         navigate('*');
-    //     }
-    //     const user = JSON.parse(storedUser);
-    //     console.warn('user', user.firstName);
-    // }, []);
-
     const onClickDelete = async (row) => {
-        console.log('Delete button clicked', row.original.treatmentNumber);
-    //     await fetch('/deleteCar', {
-    //         method: 'POST',
-    //         headers: {'Content-Type': 'application/json'},
-    //         body: JSON.stringify({
-    //             treatmentNumber:   row.original.treatmentNumber,
-    //         })
-    //     })
-    //    window.location.reload(false)
+        console.log('Delete button clicked for car with treatment number: ', row.original.treatmentNumber);
+        await fetch('/deleteCar', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                treatmentNumber:   row.original.treatmentNumber,
+            })
+        })
+       window.location.reload(false)
     }
 
     const tableColumns = useMemo(
@@ -121,7 +112,7 @@ const Dashboard = () => {
                                 <li className="nav-item dropdown no-arrow">
                                     <a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span className="mr-2 d-none d-lg-inline text-gray-600 big">{`${user.firstName} ${user.lastName}`}</span>
+                                        <span className="mr-2 d-none d-lg-inline text-gray-600 big">{`${user?.firstName} ${user?.lastName}`}</span>
                                         <img className="img-profile rounded-circle" src={imageProfile} style={{ width: '45px', height: '40px' }}/>
                                     </a>
                                     {/* Dropdown - User Information */}
