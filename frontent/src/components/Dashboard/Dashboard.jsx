@@ -14,7 +14,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         // Check for a stored session in local storage
-        const storedSession = localStorage.getItem('session');
+        const storedSession = localStorage.getItem('connected');
         if (!storedSession) {
             navigate('*');
         }
