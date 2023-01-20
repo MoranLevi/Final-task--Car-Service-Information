@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate  } from 'react-router-dom';
-import { addNewCarSchema } from 'Validations/FormsValidation';
+import { addNewCarServiceSchema } from 'Validations/FormsValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './AddNewCar.css';
+import './AddNewCarService.css';
 
 const AddNewCar = () => {
     const navigate = useNavigate();
@@ -12,14 +12,13 @@ const AddNewCar = () => {
     const handleClickDashboard = () => {
         navigate('/dashboard');
     };
-    
+
     const { register, handleSubmit, formState: { errors }} = useForm({
-        resolver: yupResolver(addNewCarSchema),
+        resolver: yupResolver(addNewCarServiceSchema),
         mode: "onChange"
     });
 
     const submitForm = async (data, e) => {
-
         const requestMsg = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -55,11 +54,11 @@ const AddNewCar = () => {
             <div className="card o-hidden border-0 shadow-lg my-5">
                 <div className="card-body p-0">
                     <div className="row">
-                        <div className="col-lg-5 d-none d-lg-block bg-register-image"></div>
+                        <div className="col-lg-5 d-none d-lg-block bg-add-new-car-service-image"></div>
                         <div className="col-lg-7">
                             <div className="p-5">
                                 <div className="text-center">
-                                    <h1 className="h4 text-gray-900 mb-4">Add a New Car!</h1>
+                                    <h1 className="h4 text-gray-900 mb-4">Add a New Car Service!</h1>
                                 </div>
                                 <form className="user" onSubmit={handleSubmit(submitForm)}>
                                     <div className="form-group row">
@@ -83,8 +82,7 @@ const AddNewCar = () => {
                                     <div className="form-group row">
                                         {/* <div className="col-sm-6 mb-3 mb-sm-0"> */}
                                         <div className="col-sm-6">
-                                            <input type="datetime-local" id="date" class="form-control form-control-user"
-                                                name="meeting-time" required/>
+                                            <input type="datetime-local" name="date" class="form-control form-control-user" {...register('date')} required/>
                                         </div>
                                         <div className="col-sm-6">
                                             <input type="text" className="form-control form-control-user" name="carNumber"

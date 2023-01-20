@@ -47,8 +47,8 @@ const Dashboard = () => {
        window.location.reload(false)
     }
 
-    const handleClickAddNewCar = () => {
-        navigate('/addNewCar');
+    const handleClickAddNewCarService = () => {
+        navigate('/addNewCarService');
     };
 
     const tableColumns = useMemo(
@@ -64,6 +64,16 @@ const Dashboard = () => {
             {
                 Header: 'Date',
                 accessor: 'dateT',
+                Cell: ({ cell: { row } }) => {
+                    const date = new Date(row.original.dateT);
+                    const day = date.getDate();
+                    const month = date.getMonth() + 1;
+                    const year = date.getFullYear();
+                    const hours = date.getHours();
+                    const minutes = date.getMinutes();
+                    const dateStr = `${day}/${month}/${year} ${hours}:${minutes}`;
+                    return dateStr;
+                }
             },
             {
                 Header: 'Worker Email',
@@ -152,7 +162,7 @@ const Dashboard = () => {
                             {/* <p className="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
                                 For more information about DataTables, please visit the <a target="_blank"
                                     href="https://datatables.net">official DataTables documentation</a>.</p> */}
-                            <button className="mb-4 btn btn-primary" onClick={handleClickAddNewCar}>Add New Car</button>
+                            <button className="mb-4 btn btn-primary" onClick={handleClickAddNewCarService}>Add New Car Service</button>
                             {/* DataTales Example */}
                             <div className="card shadow mb-4">
                                 {/* <div className="card-header py-3">
