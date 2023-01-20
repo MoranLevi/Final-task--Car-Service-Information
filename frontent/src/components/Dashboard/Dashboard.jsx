@@ -38,7 +38,6 @@ const Dashboard = () => {
     const onClickEdit = (row) => {
         console.log('Edit button clicked for car with treatment number: ', row.original.treatmentNumber);
         localStorage.setItem('carService', JSON.stringify(row.original));
-        console.log("fff", JSON.stringify(row.original))
         navigate('/editCarService');
     }
 

@@ -3,7 +3,6 @@ import { useNavigate  } from 'react-router-dom';
 import { editcarServiceSchema } from 'Validations/FormsValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import moment from 'moment/moment';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './EditCarService.css';
 
@@ -90,7 +89,8 @@ const EditCarService = () => {
                                     <div className="form-group row">
                                         {/* <div className="col-sm-6 mb-3 mb-sm-0"> */}
                                         <div className="col-sm-6">
-                                            <input type="datetime-local" name="date" class="form-control form-control-user" {...register('date')} required/>
+                                            <input type="datetime-local" name="date" className="form-control form-control-user"
+                                                defaultValue={carService.dateT.toString().slice(0, -8)} {...register('date')} required/>
                                         </div>
                                         <div className="col-sm-6">
                                             <input type="text" className="form-control form-control-user" name="carNumber"
