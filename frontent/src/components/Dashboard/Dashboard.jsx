@@ -131,7 +131,7 @@ const Dashboard = () => {
 
                             {/* Topbar Navbar */}
                             <ul className="navbar-nav ml-auto">
-                                <a href="#" className="nav-link link-log-out" onClick={handleOnClickLogOut}>Log Out</a>
+                                {/* <a href="#" className="nav-link link-log-out" onClick={handleOnClickLogOut}>Log Out</a> */}
 
                                 <div className="topbar-divider d-none d-sm-block"></div>
 
