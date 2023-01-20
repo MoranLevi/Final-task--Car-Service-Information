@@ -35,6 +35,13 @@ const Dashboard = () => {
 
     }, []); // Only run this effect once
 
+    const onClickEdit = (row) => {
+        console.log('Edit button clicked for car with treatment number: ', row.original.treatmentNumber);
+        localStorage.setItem('carService', JSON.stringify(row.original));
+        console.log("fff", JSON.stringify(row.original))
+        navigate('/editCarService');
+    }
+
     const onClickDelete = async (row) => {
         console.log('Delete button clicked for car with treatment number: ', row.original.treatmentNumber);
         await fetch('/deleteCar', {
@@ -88,7 +95,7 @@ const Dashboard = () => {
                 accessor: 'action',
                 Cell: row => (
                     <div>
-                        <button onClick={() => console.log('Button clicked for row', row)} className='button-image'>
+                        <button onClick={() => onClickEdit(row.row)} className='button-image'>
                             <img src={imageEdit} alt="image-button" style={{ width: '30px', height: '30px' }}/>
                         </button>
                         <button onClick={(e) => onClickDelete(row.row)} className='button-image'>

@@ -404,6 +404,47 @@ app.post('/addNewCarService', (req, res) => {
         })
 })
 
+app.post('/editCarService', (req, res) => {
+    console.log("POST editCarService")
+
+    if (req.body.title !== "EditCarService") {
+        res.status(400)
+        res.send("Bad Reset Password Request.")
+        return
+    }
+
+    const query = `UPDATE ${CARS_TABLE.name} SET ${CARS_TABLE.columns.treatmentInfo} = ?, ${CARS_TABLE.columns.dateT} = ?, ${CARS_TABLE.columns.workerEmail} = ?, ${CARS_TABLE.columns.carNumber} = ? WHERE ${CARS_TABLE.columns.treatmentNumber} = ?`
+    databaseConnection.query(query, [req.body.treatmentInfo,req.body.dateT, req.body.workerEmail, req.body.carNumber, req.body.treatmentNumber],
+        (err, result) => {
+            console.log("result: ", query)
+            console.log("fff", req.body.treatmentInfo,req.body.dateT, req.body.workerEmail, req.body.carNumber, req.body.treatmentNumber)
+            if (err) {
+                console.log(err)
+                res.status(500)//Internal server error
+                res.send(err)
+                return
+            }
+
+            if (result.affectedRows === 0) {
+                res.status(400)//bad request
+                res.send("Invalid treatment number parameters.")
+                return
+            }
+
+            const editCarServiceMsg = {
+                method: 'GET',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(
+                    {
+                        title: 'editCarService',
+                        resetPasswordResult: 'OK',
+                    })
+            }
+            res.type('application/json')
+            res.send(editCarServiceMsg)
+        })
+})
+
 app.listen(port, () => {
     console.log(`Car-Service server listening on http://localhost:${port}`)
 })
