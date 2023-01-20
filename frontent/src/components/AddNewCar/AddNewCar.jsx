@@ -25,7 +25,7 @@ const AddNewCar = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(
                 {
-                    title:     'AddNewCar',
+                    title:     'AddNewCarService',
                     treatmentNumber:      data.treatmentNumber,
                     treatmentInformation: data.treatmentInformation,
                     date:                 data.date,
@@ -36,15 +36,15 @@ const AddNewCar = () => {
 
         console.log("requesting");
 
-        const response = await fetch('/addNewCar', requestMsg)
+        const response = await fetch('/addNewCarService', requestMsg)
         console.log(response);
         if (!response.ok) {
-            alert('Invalid Car Details');
+            alert('Invalid Car Service Details');
             return;
         }
         const responseData = await response.json();
         console.log(responseData);
-        alert('Added New Car Successfully')
+        alert('Added New Car Service Successfully')
 
         handleClickDashboard();
     };
@@ -84,7 +84,7 @@ const AddNewCar = () => {
                                         {/* <div className="col-sm-6 mb-3 mb-sm-0"> */}
                                         <div className="col-sm-6">
                                             <input type="datetime-local" id="date" class="form-control form-control-user"
-                                                name="meeting-time"/>
+                                                name="meeting-time" required/>
                                         </div>
                                         <div className="col-sm-6">
                                             <input type="text" className="form-control form-control-user" name="carNumber"

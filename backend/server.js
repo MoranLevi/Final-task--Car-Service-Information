@@ -347,10 +347,10 @@ app.post('/deleteCar', (req, res) => {
     })
 })
 
-app.post('/addNewCar', (req, res) => {
-    console.log("POST Add-New-Car")
+app.post('/addNewCarService', (req, res) => {
+    console.log("POST Add-New-Car-Service")
 
-    if (req.body.title !== "AddNewCar") {
+    if (req.body.title !== "AddNewCarService") {
         res.status(400)
         res.send("Bad Request.")
         return
@@ -384,22 +384,22 @@ app.post('/addNewCar', (req, res) => {
 
                     if (result.length === 0) {
                         res.status(400)
-                        res.send("Invalid car parameters.")
+                        res.send("Invalid car service parameters.")
                         return
                     }
 
-                    const addNewCarMsg = {
+                    const addNewCarServiceMsg = {
                         method: 'GET',
                         headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify(
                             {
-                                title: 'addNewCar',
+                                title: 'addNewCarService',
                                 addNewCarResult: 'OK',
                             })
                     }
 
                     res.type('application/json')
-                    res.send(addNewCarMsg)
+                    res.send(addNewCarServiceMsg)
                 })
         })
 })
