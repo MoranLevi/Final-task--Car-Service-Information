@@ -12,10 +12,16 @@ const Dashboard = () => {
     const navigate = useNavigate();
     const [carsTableData, setCarsTableData] = useState([]);
 
+    const storedUser = localStorage.getItem('user');
+        if(!storedUser) {
+            navigate('*');
+        }
+    const user = JSON.parse(storedUser);
+
     useEffect(() => {
         // Check for a stored session in local storage
-        const storedSession = localStorage.getItem('connected');
-        if (!storedSession) {
+        const storedConnected = localStorage.getItem('connected');
+        if (!storedConnected) {
             navigate('*');
         }
 
@@ -28,6 +34,15 @@ const Dashboard = () => {
         fetchData();
 
     }, []); // Only run this effect once
+
+    // useMemo (() => {
+    //     const storedUser = localStorage.getItem('user');
+    //     if(!storedUser) {
+    //         navigate('*');
+    //     }
+    //     const user = JSON.parse(storedUser);
+    //     console.warn('user', user.firstName);
+    // }, []);
 
     const onClickDelete = async (row) => {
         console.log('Delete button clicked', row.original.treatmentNumber);
@@ -106,7 +121,7 @@ const Dashboard = () => {
                                 <li className="nav-item dropdown no-arrow">
                                     <a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span className="mr-2 d-none d-lg-inline text-gray-600 big">Douglas McGee</span>
+                                        <span className="mr-2 d-none d-lg-inline text-gray-600 big">{`${user.firstName} ${user.lastName}`}</span>
                                         <img className="img-profile rounded-circle" src={imageProfile} style={{ width: '45px', height: '40px' }}/>
                                     </a>
                                     {/* Dropdown - User Information */}
