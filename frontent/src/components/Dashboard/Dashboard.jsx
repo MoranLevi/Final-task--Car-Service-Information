@@ -57,6 +57,13 @@ const Dashboard = () => {
         navigate('/addNewCarService');
     };
 
+    const handleOnClickLogOut = () => {
+        localStorage.removeItem('connected');
+        localStorage.removeItem('user');
+        localStorage.removeItem('session');
+        navigate('/');
+    }
+
     const tableColumns = useMemo(
         () => [
             {
@@ -124,6 +131,7 @@ const Dashboard = () => {
 
                             {/* Topbar Navbar */}
                             <ul className="navbar-nav ml-auto">
+                                <a href="#" className="nav-link link-log-out" onClick={handleOnClickLogOut}>Log Out</a>
 
                                 <div className="topbar-divider d-none d-sm-block"></div>
 
