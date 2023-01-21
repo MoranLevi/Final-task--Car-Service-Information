@@ -1,6 +1,6 @@
 import { GlobalFilter } from 'components/Dashboard/GlobalFilter';
 import React, { useEffect } from 'react';
-import { useGlobalFilter, useSortBy, useTable } from 'react-table';
+import { useGlobalFilter, useSortBy, useTable, usePagination } from 'react-table';
 import './ReactTable.css';
 
 
@@ -15,12 +15,24 @@ const ReactTable = ({
 }) => {
 
     // Hooks
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, state, setGlobalFilter } =
+    const { getTableProps,
+            getTableBodyProps,
+            headerGroups,
+            page,
+            nextPage,
+            previousPage,
+            canNextPage,
+            canPreviousPage, 
+            pageOptions,
+            prepareRow,
+            state, 
+            setGlobalFilter } =
         // useTable({ columns, data, autoResetSortBy: false }, useGlobalFilter, useSortBy) as any;
-        useTable({ columns, data }, useGlobalFilter, useSortBy);
+        useTable({ columns, data, initialState: { pageSize: 5 } }, useGlobalFilter, useSortBy, usePagination);
 
     const { globalFilter } = state;
-
+    const { pageIndex } = state;
+    
     // Listen for input changes outside
     useEffect(() => {
         setGlobalFilter(filterString);
@@ -47,7 +59,7 @@ const ReactTable = ({
                     ))}
                 </thead>
                 <tbody {...getTableBodyProps()}>
-                    {rows.map((row) => {
+                    {page.map((row) => {
                     prepareRow(row);
                     return (
                         <tr
@@ -64,6 +76,20 @@ const ReactTable = ({
                     })}
                 </tbody>
                 </table>
+                <div>
+                    <span>
+                        page{' '}
+                        <strong>
+                            {pageIndex + 1} of {pageOptions.length}
+                        </strong>{' '}
+                    </span>
+                    <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+                        Previous
+                    </button>
+                    <button onClick={() => nextPage()} disabled={!canNextPage}>
+                        Next
+                    </button>
+                </div>
             </div>
         )}
         </div>
