@@ -33,4 +33,14 @@
 .table-container tr:hover {
     background-color: var(--table-row-background-color-hover);
 }
+
+.table-filter-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: end;
+    margin-bottom: 1rem;
+}
   

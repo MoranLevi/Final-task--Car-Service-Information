@@ -110,6 +110,8 @@ const LogIn = () => {
         console.log(data);
 
         // handleClickHome();
+        localStorage.setItem('connected', JSON.stringify(true)); // Set the connected state to true
+        localStorage.setItem('user', JSON.stringify(responseData)); // Set the user data in local storage
         handleClickDashboard();
     };
     

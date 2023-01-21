@@ -6,6 +6,8 @@ import ForgotPassword from './components/ForgotPassword/ForgotPassword';
 import ResetPassword from './components/ResetPassword/ResetPassword';
 import AboutUs from './components/AboutUs/AboutUs';
 import Dashboard from './components/Dashboard/Dashboard';
+import AddNewCarService from './components/AddNewCarService/AddNewCarService';
+import EditCarService from './components/EditCarService/EditCarService';
 import Page404 from './components/Page404/Page404';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -27,6 +29,8 @@ function App() {
                 <Route path="/resetPassword" element={<ResetPassword/>}/>
                 <Route path="/aboutUs" element={<AboutUs/>}/>
                 <Route path="/dashboard" element={<Dashboard/>}/>
+                <Route path="/addNewCarService" element={<AddNewCarService/>}/>
+                <Route path="/editCarService" element={<EditCarService/>}/>
                 <Route path="*" element={<Page404/>}/>
             </Routes> 
         </Router>  

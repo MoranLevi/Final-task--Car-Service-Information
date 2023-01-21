@@ -336,6 +336,7 @@ app.get('/getCarsData', (req, res) => {
 })
 
 app.post('/deleteCar', (req, res) => {
+    console.log(`Delete car from table`)
     // res.header('Access-Control-Allow-Origin', '*')
     const query = `Delete FROM ${CARS_TABLE.name} WHERE ${CARS_TABLE.columns.treatmentNumber} = ?`
     databaseConnection.query(query, [req.body.treatmentNumber], (err, result) => {
@@ -344,6 +345,104 @@ app.post('/deleteCar', (req, res) => {
         }
         res.send(result)
     })
+})
+
+app.post('/addNewCarService', (req, res) => {
+    console.log("POST Add-New-Car-Service")
+
+    if (req.body.title !== "AddNewCarService") {
+        res.status(400)
+        res.send("Bad Request.")
+        return
+    }
+
+    /* Check if car treatment already exist */
+    const query = `SELECT * FROM ${CARS_TABLE.name} WHERE ${CARS_TABLE.columns.treatmentNumber} = ?`
+    databaseConnection.query(query, [req.body.treatmentNumber],
+        (err, result) => {
+            if (err) {
+                res.status(500)
+                res.send(err)
+                return
+            }
+            if (result.length !== 0) {
+                res.status(400)
+                res.send("Treatment number already exists")
+                return
+            }
+
+            /* Insert new car treatment */
+            let query = `INSERT INTO ${CARS_TABLE.name} VALUES ('${req.body.treatmentNumber}','${req.body.treatmentInformation}', '${req.body.date}', '${req.body.workerEmail}', '${req.body.carNumber}')`
+            console.log(query)
+            databaseConnection.query(query,
+                (err, result) => {
+                    if (err) {
+                        res.status(500)
+                        res.send(err)
+                        throw err
+                    }
+
+                    if (result.length === 0) {
+                        res.status(400)
+                        res.send("Invalid car service parameters.")
+                        return
+                    }
+
+                    const addNewCarServiceMsg = {
+                        method: 'GET',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(
+                            {
+                                title: 'addNewCarService',
+                                addNewCarResult: 'OK',
+                            })
+                    }
+
+                    res.type('application/json')
+                    res.send(addNewCarServiceMsg)
+                })
+        })
+})
+
+app.post('/editCarService', (req, res) => {
+    console.log("POST editCarService")
+
+    if (req.body.title !== "EditCarService") {
+        res.status(400)
+        res.send("Bad Reset Password Request.")
+        return
+    }
+
+    const query = `UPDATE ${CARS_TABLE.name} SET ${CARS_TABLE.columns.treatmentInfo} = ?, ${CARS_TABLE.columns.dateT} = ?, ${CARS_TABLE.columns.workerEmail} = ?, ${CARS_TABLE.columns.carNumber} = ? WHERE ${CARS_TABLE.columns.treatmentNumber} = ?`
+    databaseConnection.query(query, [req.body.treatmentInfo,req.body.dateT, req.body.workerEmail, req.body.carNumber, req.body.treatmentNumber],
+        (err, result) => {
+            console.log("result: ", query)
+            console.log("fff", req.body.treatmentInfo,req.body.dateT, req.body.workerEmail, req.body.carNumber, req.body.treatmentNumber)
+            if (err) {
+                console.log(err)
+                res.status(500)//Internal server error
+                res.send(err)
+                return
+            }
+
+            if (result.affectedRows === 0) {
+                res.status(400)//bad request
+                res.send("Invalid treatment number parameters.")
+                return
+            }
+
+            const editCarServiceMsg = {
+                method: 'GET',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(
+                    {
+                        title: 'editCarService',
+                        resetPasswordResult: 'OK',
+                    })
+            }
+            res.type('application/json')
+            res.send(editCarServiceMsg)
+        })
 })
 
 app.listen(port, () => {
