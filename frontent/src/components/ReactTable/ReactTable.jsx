@@ -27,7 +27,6 @@ const ReactTable = ({
             prepareRow,
             state, 
             setGlobalFilter } =
-        // useTable({ columns, data, autoResetSortBy: false }, useGlobalFilter, useSortBy) as any;
         useTable({ columns, data, initialState: { pageSize: 5 } }, useGlobalFilter, useSortBy, usePagination);
 
     const { globalFilter } = state;

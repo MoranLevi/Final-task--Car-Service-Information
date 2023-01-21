@@ -59,7 +59,7 @@ const ResetPassword = () => {
                     <div className="card o-hidden border-0 shadow-lg my-5">
                         <div className="card-body p-0">
                             <div className="row">
-                                <div className="col-lg-6 d-none d-lg-block bg-password-image"></div>
+                                <div className="col-lg-6 d-none d-lg-block bg-reset-password-image"></div>
                                 <div className="col-lg-6">
                                     <div className="p-5">
                                         <div className="text-center">
@@ -70,10 +70,10 @@ const ResetPassword = () => {
                                                 <input type="email" className="form-control form-control-user"
                                                     name="email" aria-describedby="emailHelp"
                                                     placeholder="Enter Email Address..." {...register('email')}/>
-                                                {errors.email ? <p className='error-msg'>{errors.email?.message}</p> : <br/>}
+                                                {errors.email ? <p className='error-msg'>{errors.email?.message}</p> : <p className='space2'>{'.'}</p>}
                                                 <input type="password" className="form-control form-control-user"
                                                     name="password" placeholder="Password" {...register('password')}/>
-                                                {errors.password ? <p className='error-msg'>{errors.password?.message}</p> : <br/>}
+                                                {errors.password ? <p className='error-msg'>{errors.password?.message}</p> : <p className='space2'>{'.'}</p>}
                                                 <input type="password" className="form-control form-control-user"
                                                     name="repeatPassword" placeholder="Repeat Password" {...register('repeatPassword')}/>
                                                 {errors.repeatPassword ? <p className='error-msg'>{errors.repeatPassword?.message}</p> : <p className='space2'>{'.'}</p>}
