@@ -88,7 +88,7 @@ const SignUp = () => {
                     <div className="row">
                         <div className="col-lg-5 d-none d-lg-block bg-register-image"></div>
                         <div className="col-lg-7">
-                            <div className="p-5">
+                            <div className="p-3">
                                 <div className="text-center">
                                     <h1 className="h4 text-gray-900 mb-4">Create an Account!</h1>
                                 </div>
