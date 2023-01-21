@@ -285,37 +285,6 @@ app.post('/reCaptchaValidation', async (req, res) => {
         res.send("ReCAPTCHA verification failed")
         return
     }
-
-    // await fetch('https://www.google.com/recaptcha/api/siteverify', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/x-www-form-urlencoded',
-    //     },
-    //     body: `secret=${secret_key}&response=${token}`,
-    //     })
-    //     .then(response => response.json())
-    //     .then(json => {
-    //         if (json.success) {
-    //             console.log('reCAPTCHA verification succeeded');
-    //             const reCAPTCHAMsg = {
-    //                 method: 'GET',
-    //                 headers: {'Content-Type': 'application/json'},
-    //                 body: JSON.stringify(
-    //                     {
-    //                         title: 'reCAPTCHA',
-    //                         signUpResult: 'OK',
-    //                     })
-    //             }
-    //             res.type('application/json')
-    //             res.send(reCAPTCHAMsg)
-    //             return
-    //         } else {
-    //             console.log('reCAPTCHA verification failed');
-    //             res.status(400)
-    //             res.send("ReCAPTCHA verification failed")
-    //             return
-    //         }
-    // });
 })
 
 app.get('/getCarsData', (req, res) => {
@@ -325,9 +294,6 @@ app.get('/getCarsData', (req, res) => {
     var query = `SELECT * FROM ${CARS_TABLE.name}`
     databaseConnection.query(query, (err, result) => {
         if (err) {
-            // res.status(500)
-            // res.send(err)
-            //     return
             console.log(err)
             throw err
         }
