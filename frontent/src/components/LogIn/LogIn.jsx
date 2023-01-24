@@ -8,14 +8,17 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './LogIn.css';
 
-const LogIn = () => {
+import Popup from 'reactjs-popup';
+import { Modal, Button } from "react-bootstrap";
 
+
+const LogIn = () => {
     const navigate = useNavigate();
     const [rememberMe, setRememberMe] = useState(0);
-    
-    
-    const captchaRef = useRef(null);
-	
+    const [showModal, setShow] = useState(false);
+    const [msgModal, setMsgModal] = useState('');
+    const captchaRef = useRef(null); 
+
     useEffect(() => {
         // Check for a stored session in local storage
         const storedSession = localStorage.getItem('session');
@@ -29,6 +32,13 @@ const LogIn = () => {
             }
         }
       }, []); // Only run this effect once
+      
+
+    const handleClose = () =>{
+         setShow(false);
+         setMsgModal('');
+    }
+    const handleShow = () => setShow(true);
 
     const handleClickForgotPassword = () => {
         navigate('/forgotPassword');
@@ -37,10 +47,7 @@ const LogIn = () => {
     const handleClickSignUp = () => {
         navigate('/signUp');
     };
-
-    // const handleClickHome = () => {
-    //     navigate('/');
-    // };
+    
 
     const handleClickDashboard = () => {
         navigate('/dashboard');
@@ -76,7 +83,9 @@ const LogIn = () => {
         const reCaptchaResponse = await fetch('/reCaptchaValidation', reCAPTCHMsg)
         console.log(reCaptchaResponse);
         if (!reCaptchaResponse.ok) {
-            alert('ReCAPTCHA verification failed');
+            setMsgModal('ReCAPTCHA verification failed')
+           handleShow()
+            //alert('ReCAPTCHA verification failed');
             return;
         }
 
@@ -94,9 +103,11 @@ const LogIn = () => {
         console.log("requesting");
 
         const response = await fetch('/logIn', requestMsg);
-
+        
         if (!response.ok) {
-            alert('Invalid Login Details');
+            setMsgModal('Invalid Login Details')
+           handleShow()
+            //alert('Invalid Login Details');
             localStorage.clear();
             return;
         }
@@ -116,6 +127,7 @@ const LogIn = () => {
     };
     
     return (
+        
         <div className="container">
 
             <div className="row justify-content-center">
@@ -171,6 +183,18 @@ const LogIn = () => {
                 </div>
 
             </div>
+            <Modal show={showModal} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title className='msg-modal-title'>ALERT!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body><p className='msg-modal'>{msgModal}</p></Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    
+                </Modal.Footer>
+            </Modal>
     </div>
     );
 };

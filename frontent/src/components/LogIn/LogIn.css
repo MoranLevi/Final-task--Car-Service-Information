@@ -4,6 +4,6 @@
     background-size: cover;
 }
 
-.remember-me-label {
+.remember-me-label,.msg-modal,.msg-modal-title {
     color: #000;
 }
