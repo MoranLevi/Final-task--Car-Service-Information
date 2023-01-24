@@ -75,19 +75,24 @@ const ReactTable = ({
                     })}
                 </tbody>
                 </table>
-                <div>
-                    <span>
-                        page{' '}
-                        <strong>
-                            {pageIndex + 1} of {pageOptions.length}
-                        </strong>{' '}
-                    </span>
-                    <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-                        Previous
-                    </button>
-                    <button onClick={() => nextPage()} disabled={!canNextPage}>
-                        Next
-                    </button>
+                <div className='paging-data-container'>
+                    <div className='total-number-of-records'>
+                        Showing {pageIndex * 5 + 1} to {pageIndex * 5 + page.length} of {data.length}{' '} records
+                    </div>
+                    <div className='paging-data-buttons'>
+                        <span>
+                            page{' '}
+                            <strong>
+                                {pageIndex + 1} of {pageOptions.length}
+                            </strong>{' '}
+                        </span>
+                        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+                            Previous
+                        </button>
+                        <button onClick={() => nextPage()} disabled={!canNextPage}>
+                            Next
+                        </button>
+                    </div>
                 </div>
             </div>
         )}
