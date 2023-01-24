@@ -1,4 +1,4 @@
-import { GlobalFilter } from 'components/Dashboard/GlobalFilter';
+import { GlobalFilter } from 'components/ReactTable/GlobalFilter';
 import React, { useEffect } from 'react';
 import { useGlobalFilter, useSortBy, useTable, usePagination } from 'react-table';
 import './ReactTable.css';
