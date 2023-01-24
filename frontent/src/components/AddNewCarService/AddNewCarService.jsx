@@ -6,19 +6,27 @@ import { useForm } from 'react-hook-form';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './AddNewCarService.css';
 
+/* Add New Car Service Component
+    A component that add new car service to the database */
 const AddNewCarService = () => {
-    const navigate = useNavigate();
+    
+    const navigate = useNavigate(); /* define hook to navigate to other pages */
 
+    /* function that navigate to the dashboard page */
     const handleClickDashboard = () => {
         navigate('/dashboard');
     };
 
+    /* define useForm for the addNewCarService form */
     const { register, handleSubmit, formState: { errors }} = useForm({
         resolver: yupResolver(addNewcarServiceSchema),
         mode: "onChange"
     });
 
+    /* function that submit the form and send the data to the server */
     const submitForm = async (data, e) => {
+
+        /* define the request message */
         const requestMsg = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -35,16 +43,19 @@ const AddNewCarService = () => {
 
         console.log("requesting");
 
+        /* send the request to the server */
         const response = await fetch('/addNewCarService', requestMsg)
         console.log(response);
         if (!response.ok) {
             alert('Invalid Car Service Details');
             return;
         }
+        /* get the response from the server */
         const responseData = await response.json();
         console.log(responseData);
         alert('Added New Car Service Successfully')
 
+        /* navigate to the dashboard page */
         handleClickDashboard();
     };
 
@@ -62,7 +73,6 @@ const AddNewCarService = () => {
                                 </div>
                                 <form className="user" onSubmit={handleSubmit(submitForm)}>
                                     <div className="form-group row">
-                                        {/* <div className="col-sm-6 mb-3 mb-sm-0"> */}
                                         <div className="col-sm-6">
                                             <input type="text" className="form-control form-control-user" name="treatmentNumber"
                                                 placeholder="Treatment Number" {...register('treatmentNumber')}/>
@@ -80,7 +90,6 @@ const AddNewCarService = () => {
                                         {errors.workerEmail ? <p className='error-msg'>{errors.workerEmail?.message}</p> : <br/>}
                                     </div>
                                     <div className="form-group row">
-                                        {/* <div className="col-sm-6 mb-3 mb-sm-0"> */}
                                         <div className="col-sm-6">
                                             <input type="datetime-local" name="date" class="form-control form-control-user" {...register('date')} required/>
                                         </div>
@@ -91,7 +100,7 @@ const AddNewCarService = () => {
                                         </div>
 
                                     </div>
-                                    <input type="submit" className="btn btn-primary btn-user btn-block" value={'Add Car'}></input>
+                                    <input type="submit" className="btn btn-primary btn-user btn-block" value={'Add Car'}></input> {/* submit button */}
                                 </form>
                             </div>
                         </div>

@@ -7,42 +7,48 @@ import imageDelete from '../../images/delete-car-image.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Dashboard.css';
 
+/* Dashboard Component */
 const Dashboard = () => {
     
-    const navigate = useNavigate();
-    const [carsTableData, setCarsTableData] = useState([]);
+    const navigate = useNavigate(); /* define hook to navigate to other pages */
+    const [carsTableData, setCarsTableData] = useState([]); /* define state to save the cars data */
 
     const storedUser = localStorage.getItem('user');
-        if(!storedUser) {
-            navigate('*');
-        }
-    const user = JSON.parse(storedUser);
+    if(!storedUser) { 
+        navigate('*'); /* if the user is not exists in local storage, navigate to the 404 page */
+    }
+    const user = JSON.parse(storedUser); /* else get the user data from local storage */
 
     useEffect(() => {
         // Check for a stored session in local storage
         const storedConnected = localStorage.getItem('connected');
         if (!storedConnected) {
-            navigate('*');
+            navigate('*'); /* if the user is not logged in, navigate to the 404 page */
         }
         
+        /* else get the cars data from the server */
         async function fetchData() {
-            const response = await fetch('/getCarsData');
-            const json = await response.json();
-            setCarsTableData(json);
+            const response = await fetch('/getCarsData'); /* send request to the server */
+            const json = await response.json(); /* get the response from the server */
+            setCarsTableData(json); /* save the cars data in the carsTableData state */
             console.log(json);
         }
         fetchData();
 
     }, []); // Only run this effect once
 
+    /* function that navigate to the addNewCarService page when click on edit specific car service*/
     const onClickEdit = (row) => {
         console.log('Edit button clicked for car with treatment number: ', row.original.treatmentNumber);
-        localStorage.setItem('carService', JSON.stringify(row.original));
-        navigate('/editCarService');
+        localStorage.setItem('carService', JSON.stringify(row.original)); /* save the car service data that choose to edit in local storage */
+        navigate('/editCarService'); /* navigate to the editCarService page */
     }
 
+    /* function that delete the specific car service when click on delete specific car service*/
     const onClickDelete = async (row) => {
         console.log('Delete button clicked for car with treatment number: ', row.original.treatmentNumber);
+        
+        /* send request to the server to delete the specific car service */
         await fetch('/deleteCar', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -50,13 +56,15 @@ const Dashboard = () => {
                 treatmentNumber:   row.original.treatmentNumber,
             })
         })
-       window.location.reload(false)
+       window.location.reload(false) /* reload the page after delete car service*/
     }
 
+    /* function that navigate to the addNewCarService page when click on add new car service*/
     const handleClickAddNewCarService = () => {
         navigate('/addNewCarService');
     };
 
+    /* function that implement log out- remove the coonected, user, session from the local storage and move to the home page */
     const handleOnClickLogOut = () => {
         localStorage.removeItem('connected');
         localStorage.removeItem('user');
@@ -64,6 +72,7 @@ const Dashboard = () => {
         navigate('/');
     }
 
+    /* define the columns of the cars service table */
     const tableColumns = useMemo(
         () => [
             {
@@ -77,7 +86,7 @@ const Dashboard = () => {
             {
                 Header: 'Date',
                 accessor: 'dateT',
-                Cell: ({ cell: { row } }) => {
+                Cell: ({ cell: { row } }) => { /* define the date format */
                     const date = new Date(row.original.dateT);
                     const day = date.getDate();
                     const month = date.getMonth() + 1;
@@ -101,10 +110,10 @@ const Dashboard = () => {
                 accessor: 'action',
                 Cell: row => (
                     <div>
-                        <button onClick={() => onClickEdit(row.row)} className='button-image'>
+                        <button onClick={() => onClickEdit(row.row)} className='button-image'> {/* define the edit button */}
                             <img src={imageEdit} alt="image-button" style={{ width: '30px', height: '30px' }}/>
                         </button>
-                        <button onClick={(e) => onClickDelete(row.row)} className='button-image'>
+                        <button onClick={(e) => onClickDelete(row.row)} className='button-image'> {/* define the delete button */}
                             <img src={imageDelete} alt="image-button" style={{ width: '30px', height: '30px' }}/>
                         </button>
                     </div>     

@@ -3,11 +3,14 @@ import { Card } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './AboutUs.css';
 
+/* About Us component 
+   A component that shows information about the about the founders of the site and the site's offers */
 const AboutUs = () => {
 
     return (
         <div className='aboutUs-backgroundimg'>
             <div className='aboutUs-details-container'>
+                {/* Card component from react-bootstrap library with data about the founders of the site */}
                 <Card style={{width: '100%', color: 'black', background: 'rgba(192, 192, 192, 1)'}} >
                     <Card.Body>
                         <h4><b>Ort Braude - Client and Server Technologies Course 2023</b></h4>
@@ -16,6 +19,7 @@ const AboutUs = () => {
                         Yassmine Machour & Moran Levi
                     </Card.Body>
                 </Card>
+                {/* Card component from react-bootstrap library with data about the site's offers */}
                 <Card style={{width: '100%', color: 'black', background: 'rgba(192, 192, 192, 1)'}} >
                     <Card.Body>
                     <h4><b>What we offer?</b></h4>
@@ -28,4 +32,4 @@ const AboutUs = () => {
     );
 };
 
-export default AboutUs;
+export default AboutUs; /* export the component */

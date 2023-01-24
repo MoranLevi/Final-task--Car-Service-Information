@@ -6,12 +6,15 @@ import { useForm } from 'react-hook-form';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './EditCarService.css';
 
+/* Edit Car Service Component 
+   A component that add edit car service in the database*/
 const EditCarService = () => {
-    const navigate = useNavigate();
+
+    const navigate = useNavigate(); /* define hook to navigate to other pages */
 
     const storedCarService = localStorage.getItem('carService');
         if(!storedCarService) {
-            navigate('*');
+            navigate('*'); 
         }
     const carService = JSON.parse(storedCarService);
 

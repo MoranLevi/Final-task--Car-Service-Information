@@ -12,14 +12,11 @@ import Page404 from './components/Page404/Page404';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
+/* App.js is the main component of the application. It is the parent component of all other components. */
 function App() {
   return (
-    // <div id="App" style={{
-    //     backgroundImage:`url(${background})`,
-    //     minHeight: "100vh",
-    //     backgroundSize: "cover"
-    //     }}>
     <div id='App'>
+        {/* Router is the parent component of all other components. It is used to route the user to the desired component. */}
         <Router>
             <Routes>
                 <Route path="/" element={<Home/>}/>
@@ -38,4 +35,4 @@ function App() {
 );
 }
 
-export default App;
+export default App; /* Exporting the App component */
