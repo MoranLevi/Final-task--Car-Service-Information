@@ -2,32 +2,40 @@ import React from 'react';
 import { forgotPasswordSchema } from 'Validations/FormsValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate  } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './ForgotPassword.css';
 
+/* Forgot Password Component */
 const ForgotPassword = () => {
-    const navigate = useNavigate();
 
+    const navigate = useNavigate(); /* define hook to navigate to other pages */
+
+    /* function that navigate to the signUp page */
     const handleClickSignUp = () => {
         navigate('/signUp');
     };
 
+    /* function that navigate to the logIn page */
     const handleClickLogIn = () => {
         navigate('/logIn');
     };
 
+    /* function that navigate to the home page */
     const handleClickHome = () => {
         navigate('/');
     };
 
+    /* define useForm for the forgotPassword form */
     const { register, handleSubmit, formState: { errors }} = useForm({
-        resolver: yupResolver(forgotPasswordSchema),
-        mode: "onChange"
+        resolver: yupResolver(forgotPasswordSchema), /* validate the form with the schema */
+        mode: "onChange" /* validate the form on change */
     });
 
+    /* function that submit the form and send the data to the server */
     const submitForm = async (data) => {
-        //add fetch to send data to backend
+        
+        /* define the request message */
         const requestMsg = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -39,12 +47,14 @@ const ForgotPassword = () => {
         };
         console.log("requesting");
 
+        /* send the request to the server */
         const response = await fetch('/forgotPassword', requestMsg)
         console.log(response);
-        if (!response.ok) {
+        if (!response.ok) { /* if the response is not ok, alert the user */
             alert('Invalid Details');
             return;
         }
+        /* if the response is ok, alert the user */
         const responseData = await response.json();
         console.log(responseData);
         alert('Sent! Check your mail.')
@@ -73,9 +83,9 @@ const ForgotPassword = () => {
                                                 <input type="email" className="form-control form-control-user"
                                                     name="email" aria-describedby="emailHelp"
                                                     placeholder="Enter Email Address..." {...register('email')}/>
-                                                    {errors.email ? <p className='error-msg'>{errors.email?.message}</p> : <br/>}
+                                                    {errors.email ? <p className='error-msg'>{errors.email?.message}</p> : <br/>} {/* display error message if the email is not valid */}
                                             </div>
-                                            <input type="submit" className="btn btn-primary btn-user btn-block" value={'Reset Password'}></input>
+                                            <input type="submit" className="btn btn-primary btn-user btn-block" value={'Reset Password'}></input> {/* submit button */}
                                         </form>
                                         <hr/>
                                         <div className="text-center">

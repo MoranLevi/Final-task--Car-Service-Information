@@ -9,30 +9,38 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './SignUp.css';
 import '../../css/sb-admin-2.css';
 
+/* SignUp Component */
 const SignUp = () => {
 
-    const navigate = useNavigate();
+    const navigate = useNavigate(); /* define hook to navigate to other pages */
 
-    const captchaRef = useRef(null);
+    const captchaRef = useRef(null); /* define ref for the reCAPTCHA */
     
+    /* function that navigates to the home page */
     const handleClickHome = () => {
         navigate('/');
     };
 
+    /* function that navigates to the log in page */
     const handleClickLogIn = () => {
         navigate('/logIn');
     };
     
+    /* define useForm for the signUp form */
     const { register, handleSubmit, formState: { errors }} = useForm({
-        resolver: yupResolver(signUpSchema),
-        mode: "onChange"
+        resolver: yupResolver(signUpSchema), /* validate the form with the schema */
+        mode: "onChange" /* validate the form on change */
     });
 
+    /* function that submit the form and send the data to the server*/
     const submitForm = async (data, e) => {
         e.preventDefault();
+
+        /* get the token from the reCAPTCHA */
         const token = captchaRef.current.getValue();
         captchaRef.current.reset();
 
+        /* define the recaptch request message */
         const reCAPTCHMsg = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -45,13 +53,14 @@ const SignUp = () => {
         
         console.log("requesting");
 
-        const reCaptchaResponse = await fetch('/reCaptchaValidation', reCAPTCHMsg)
+        const reCaptchaResponse = await fetch('/reCaptchaValidation', reCAPTCHMsg) /* send the token to the server to validate it */
         console.log(reCaptchaResponse);
-        if (!reCaptchaResponse.ok) {
+        if (!reCaptchaResponse.ok) { /* if the recaptcha is not valid, alert the user */
             alert('ReCAPTCHA verification failed');
             return;
         }
 
+        /* define the signUp request message */
         const requestMsg = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -67,17 +76,17 @@ const SignUp = () => {
 
         console.log("requesting");
 
-        const response = await fetch('/signUp', requestMsg)
+        const response = await fetch('/signUp', requestMsg) /* send the data to the server to register the user */
         console.log(response);
-        if (!response.ok) {
+        if (!response.ok) { /* if the response is not ok, alert the user */
             alert('Invalid Registration Details');
             return;
         }
-        const responseData = await response.json();
+        const responseData = await response.json(); /* get the response data */
         console.log(responseData);
-        alert('Registered! Please login.')
+        alert('Registered! Please login.') /* alert the user that the registration was successful */
 
-        handleClickHome();
+        handleClickHome(); /* navigate to the home page */
     };
     
     return (
@@ -94,42 +103,39 @@ const SignUp = () => {
                                 </div>
                                 <form className="user" onSubmit={handleSubmit(submitForm)}>
                                     <div className="form-group row">
-                                        {/* <div className="col-sm-6 mb-3 mb-sm-0"> */}
                                         <div className="col-sm-6">
                                             <input type="text" className="form-control form-control-user" name="firstName"
                                                 placeholder="First Name" {...register('firstName')}/>
-                                            {errors.firstName ? <p className='error-msg'>{errors.firstName?.message}</p> : <br/>}
+                                            {errors.firstName ? <p className='error-msg'>{errors.firstName?.message}</p> : <br/>} {/* display error message if the first name is not valid */}
                                         </div>
                                         <div className="col-sm-6">
                                             <input type="text" className="form-control form-control-user" name="lastName"
                                                 placeholder="Last Name" {...register('lastName')}/>
-                                            {errors.lastName ? <p className='error-msg'>{errors.lastName?.message}</p> : <p className='space'>{'.'}</p>}
+                                            {errors.lastName ? <p className='error-msg'>{errors.lastName?.message}</p> : <p className='space'>{'.'}</p>} {/* display error message if the last name is not valid */}
                                         </div>
                                     </div>
                                     <div className="form-group">
                                         <input type="email" className="form-control form-control-user" name="email"
                                             placeholder="Email Address" {...register('email')}/>
-                                        {errors.email ? <p className='error-msg'>{errors.email?.message}</p> : <br/>}
+                                        {errors.email ? <p className='error-msg'>{errors.email?.message}</p> : <br/>} {/* display error message if the email is not valid */}
                                     </div>
                                     <div className="form-group row">
-                                        {/* <div className="col-sm-6 mb-3 mb-sm-0"> */}
                                         <div className="col-sm-6">
                                             <input type="password" className="form-control form-control-user"
                                                 name="password" placeholder="Password" {...register('password')}/>
-                                            {errors.password ? <p className='error-msg'>{errors.password?.message}</p> : <br/>}
+                                            {errors.password ? <p className='error-msg'>{errors.password?.message}</p> : <br/>} {/* display error message if the password is not valid */}
                                         </div>
                                         <div className="col-sm-6">
                                             <input type="password" className="form-control form-control-user"
                                                 name="repeatPassword" placeholder="Repeat Password" {...register('repeatPassword')}/>
-                                            {errors.repeatPassword ? <p className='error-msg'>{errors.repeatPassword?.message}</p> : <p className='space2'>{'.'}</p>}
+                                            {errors.repeatPassword ? <p className='error-msg'>{errors.repeatPassword?.message}</p> : <p className='space2'>{'.'}</p>} {/* display error message if the repeat password is not valid */}
                                         </div>
                                     </div>
-                                    <center className='margin-bottom-ReCAPTCHA'><ReCAPTCHA
+                                    <center className='margin-bottom-ReCAPTCHA'><ReCAPTCHA /* display the reCAPTCHA */
                                         sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
                                         ref={captchaRef}
                                     /></center>
-                                    <input type="submit" className="btn btn-primary btn-user btn-block" value={'Register Account'}></input>
-                                    {/* <input type="submit" className="btn btn-primary btn-user btn-block" value={'Register Account'} disabled={!isReCAPTCHVerified}></input> */}
+                                    <input type="submit" className="btn btn-primary btn-user btn-block" value={'Register Account'}></input> 
                                 </form>
                                 <hr/>
                                 <div className="text-center">

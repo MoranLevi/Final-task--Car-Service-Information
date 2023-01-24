@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './AddNewCarService.css';
 
 /* Add New Car Service Component
-    A component that add new car service to the database */
+   A component that add new car service to the database */
 const AddNewCarService = () => {
     
     const navigate = useNavigate(); /* define hook to navigate to other pages */
@@ -19,8 +19,8 @@ const AddNewCarService = () => {
 
     /* define useForm for the addNewCarService form */
     const { register, handleSubmit, formState: { errors }} = useForm({
-        resolver: yupResolver(addNewcarServiceSchema),
-        mode: "onChange"
+        resolver: yupResolver(addNewcarServiceSchema), /* validate the form with the schema */
+        mode: "onChange" /* validate the form on change */
     });
 
     /* function that submit the form and send the data to the server */
@@ -43,10 +43,9 @@ const AddNewCarService = () => {
 
         console.log("requesting");
 
-        /* send the request to the server */
-        const response = await fetch('/addNewCarService', requestMsg)
+        const response = await fetch('/addNewCarService', requestMsg) /* send the request to the server */ 
         console.log(response);
-        if (!response.ok) {
+        if (!response.ok) { /* if the response is not ok, alert the user */
             alert('Invalid Car Service Details');
             return;
         }
@@ -76,18 +75,18 @@ const AddNewCarService = () => {
                                         <div className="col-sm-6">
                                             <input type="text" className="form-control form-control-user" name="treatmentNumber"
                                                 placeholder="Treatment Number" {...register('treatmentNumber')}/>
-                                            {errors.treatmentNumber ? <p className='error-msg'>{errors.treatmentNumber?.message}</p> : <br/>}
+                                            {errors.treatmentNumber ? <p className='error-msg'>{errors.treatmentNumber?.message}</p> : <br/>} {/* display error message if the treatment number is not valid */}
                                         </div>
                                         <div className="col-sm-6">
                                             <input type="text" className="form-control form-control-user" name="treatmentInformation"
                                                 placeholder="Treatment Information" {...register('treatmentInformation')}/>
-                                            {errors.treatmentInformation ? <p className='error-msg'>{errors.treatmentInformation?.message}</p> : <p className='space'>{'.'}</p>}
+                                            {errors.treatmentInformation ? <p className='error-msg'>{errors.treatmentInformation?.message}</p> : <p className='space'>{'.'}</p>} {/* display error message if the treatment information is not valid */}
                                         </div>
                                     </div>
                                     <div className="form-group">
                                         <input type="email" className="form-control form-control-user" name="workerEmail"
                                             placeholder="Worker Email" {...register('workerEmail')}/>
-                                        {errors.workerEmail ? <p className='error-msg'>{errors.workerEmail?.message}</p> : <br/>}
+                                        {errors.workerEmail ? <p className='error-msg'>{errors.workerEmail?.message}</p> : <br/>} {/* display error message if the worker email is not valid */}
                                     </div>
                                     <div className="form-group row">
                                         <div className="col-sm-6">
@@ -96,7 +95,7 @@ const AddNewCarService = () => {
                                         <div className="col-sm-6">
                                             <input type="text" className="form-control form-control-user" name="carNumber"
                                                 placeholder="Car Number" {...register('carNumber')}/>
-                                            {errors.carNumber ? <p className='error-msg'>{errors.carNumber?.message}</p> : <p className='space'>{'.'}</p>}
+                                            {errors.carNumber ? <p className='error-msg'>{errors.carNumber?.message}</p> : <p className='space'>{'.'}</p>} {/* display error message if the car number is not valid */}
                                         </div>
 
                                     </div>
