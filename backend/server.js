@@ -128,6 +128,29 @@ app.post('/signUp', (req, res) => {
                         res.send("Invalid login parameters.")
                         return
                     }
+                    let transporter = nodemailer.createTransport({
+                        service: 'hotmail',
+                        auth: {
+                            user: 'yassmineMoran@hotmail.com',
+                            pass: 'ClientServer'
+                        },
+                        tls : { rejectUnauthorized: false }
+                    });
+        
+                    let mailOptions ={
+                        from:'yassmineMoran@hotmail.com',
+                        to: req.body.email,
+                        subject: 'Welcome',
+                        text: 'Hello,\nWelcome to our car service application'
+                    };
+        
+                    transporter.sendMail(mailOptions, function(err,info){
+                        if(err){
+                            console.log(err);
+                            return;
+                        }
+                        console.log("sent: "+info.response);
+                    })
 
                     const signUpMsg = {
                         method: 'GET',
