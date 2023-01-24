@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import md5 from 'md5';
 import {resetPasswordSchema } from 'Validations/FormsValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,10 +7,25 @@ import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ResetPassword.css';
 
+import Popup from 'reactjs-popup';
+import { Modal, Button } from "react-bootstrap";
+
 /* ResetPassword Component */
 const ResetPassword = () => {
 
     const navigate = useNavigate(); /* define hook to navigate to other pages */
+    const [showModal, setShow] = useState(false);/*define state for the modal box */
+    const [msgModal, setMsgModal] = useState('');/*define state for the message modal box */
+
+    /* function that close the modal and reset the message modal*/
+    const handleClose = () =>{
+        setShow(false);
+        setMsgModal('');
+   }
+   /* function that open the modal and displays it*/
+   const handleShow = () =>{
+       setShow(true);
+   }
 
     /* function that navigates to the log in page */
     const handleClickLogIn = () => {
@@ -47,13 +62,14 @@ const ResetPassword = () => {
         const response = await fetch('/resetPassword', requestMsg) /* send the data to the server */
         console.log(response);
         if (!response.ok) { /* if the response is not ok, alert the user */
-            alert('Invalid Details');
+            setMsgModal('Invalid Details.');
+            handleShow();
             return;
         }
         const responseData = await response.json(); /* retrieve the response data */
         console.log(responseData);
-        alert('Updated.') /* alert the user */
-
+        setMsgModal('Updated.');/* alert the user */
+        handleShow();
         handleClickLogIn(); /* navigate to the log in page */
     };
 
@@ -99,7 +115,18 @@ const ResetPassword = () => {
                 </div>
 
             </div>
-
+            <Modal show={showModal} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title className='msg-modal-title'>ALERT!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body><p className='msg-modal'>{msgModal}</p></Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };

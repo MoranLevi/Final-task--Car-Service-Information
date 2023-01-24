@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { useNavigate  } from 'react-router-dom';
 import { editcarServiceSchema } from 'Validations/FormsValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -6,16 +6,33 @@ import { useForm } from 'react-hook-form';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './EditCarService.css';
 
+import Popup from 'reactjs-popup';
+import { Modal, Button } from "react-bootstrap";
+
 /* Edit Car Service Component 
    A component that add edit car service in the database*/
 const EditCarService = () => {
 
     const navigate = useNavigate(); /* define hook to navigate to other pages */
+    const [showModal, setShow] = useState(false);/*define state for the modal box */
+    const [msgModal, setMsgModal] = useState('');/*define state for the message modal box */
+
 
     const storedCarService = localStorage.getItem('carService');
         if(!storedCarService) {
             navigate('*'); /* if the car service data not found, navigate to the 404 page */
         }
+    
+    /* function that close the modal and reset the message modal*/
+    const handleClose = () =>{
+        setShow(false);
+        setMsgModal('');
+   }
+   /* function that open the modal and displays it*/
+   const handleShow = () =>{
+       setShow(true);
+   }
+
     const carService = JSON.parse(storedCarService); /* get the car service data from the local storage */
 
     /* function that clear the carService that found in loocal storage and navigate to the dashboard */
@@ -53,14 +70,16 @@ const EditCarService = () => {
         const response = await fetch('/editCarService', requestMsg) /* send the request to the server */
         console.log(response);
         if (!response.ok) { /* if the response is not ok, alert the user */
-            alert('Invalid Car Service Details');
+            setMsgModal('Invalid Car Service Details');
+            handleShow();
             return;
         }
 
         /* get the response from the server */
         const responseData = await response.json();
         console.log(responseData);
-        alert('Edit Car Service Successfully')
+        setMsgModal('Edit Car Service Successfully');
+        handleShow();
 
         /* navigate to the dashboard page */
         handleClickDashboard();
@@ -115,7 +134,18 @@ const EditCarService = () => {
                     </div>
                 </div>
             </div>
-
+            <Modal show={showModal} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title className='msg-modal-title'>ALERT!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body><p className='msg-modal'>{msgModal}</p></Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };

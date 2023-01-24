@@ -7,7 +7,9 @@
 .error-msg {
     color: red; 
 }
-
+.msg-modal,.msg-modal-title{
+    color: black;
+}
 .space {
     margin-bottom: 16.5px;
 }

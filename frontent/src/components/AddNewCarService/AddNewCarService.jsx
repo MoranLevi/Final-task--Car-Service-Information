@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { useNavigate  } from 'react-router-dom';
 import { addNewcarServiceSchema } from 'Validations/FormsValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -6,16 +6,32 @@ import { useForm } from 'react-hook-form';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './AddNewCarService.css';
 
+
+import Popup from 'reactjs-popup';
+import { Modal, Button } from "react-bootstrap";
+
 /* Add New Car Service Component
    A component that add new car service to the database */
 const AddNewCarService = () => {
     
     const navigate = useNavigate(); /* define hook to navigate to other pages */
+    const [showModal, setShow] = useState(false);/*define state for the modal box */
+    const [msgModal, setMsgModal] = useState('');/*define state for the message modal box */
 
     /* function that navigate to the dashboard page */
     const handleClickDashboard = () => {
         navigate('/dashboard');
     };
+
+    /* function that close the modal and reset the message modal*/
+    const handleClose = () =>{
+        setShow(false);
+        setMsgModal('');
+   }
+   /* function that open the modal and displays it*/
+   const handleShow = () =>{
+       setShow(true);
+   }
 
     /* define useForm for the addNewCarService form */
     const { register, handleSubmit, formState: { errors }} = useForm({
@@ -46,14 +62,15 @@ const AddNewCarService = () => {
         const response = await fetch('/addNewCarService', requestMsg) /* send the request to the server */ 
         console.log(response);
         if (!response.ok) { /* if the response is not ok, alert the user */
-            alert('Invalid Car Service Details');
+            setMsgModal('Invalid Car Service Details');
+            handleShow();    
             return;
         }
         /* get the response from the server */
         const responseData = await response.json();
         console.log(responseData);
-        alert('Added New Car Service Successfully')
-
+        setMsgModal('Added New Car Service Successfully');
+        handleShow();
         /* navigate to the dashboard page */
         handleClickDashboard();
     };
@@ -106,7 +123,18 @@ const AddNewCarService = () => {
                     </div>
                 </div>
             </div>
-
+            <Modal show={showModal} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title className='msg-modal-title'>ALERT!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body><p className='msg-modal'>{msgModal}</p></Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };

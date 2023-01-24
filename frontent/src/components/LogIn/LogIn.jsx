@@ -125,7 +125,7 @@ const LogIn = () => {
         
         if (!response.ok) {/* if the response is not ok, alert the user */
             setMsgModal('Invalid Login Details');
-           handleShow();
+            handleShow();
             localStorage.clear();/* Clear the local storage */
 
             return;

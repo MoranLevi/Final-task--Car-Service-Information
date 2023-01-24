@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef,useState } from 'react';
 import { useNavigate  } from 'react-router-dom';
 import { signUpSchema } from 'Validations/FormsValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -9,13 +9,27 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './SignUp.css';
 import '../../css/sb-admin-2.css';
 
+import Popup from 'reactjs-popup';
+import { Modal, Button } from "react-bootstrap";
+
 /* SignUp Component */
 const SignUp = () => {
 
     const navigate = useNavigate(); /* define hook to navigate to other pages */
-
+    const [showModal, setShow] = useState(false);/*define state for the modal box */
+    const [msgModal, setMsgModal] = useState('');/*define state for the message modal box */
     const captchaRef = useRef(null); /* define ref for the reCAPTCHA */
     
+    /* function that close the modal and reset the message modal*/
+    const handleClose = () =>{
+        setShow(false);
+        setMsgModal('');
+   }
+   /* function that open the modal and displays it*/
+   const handleShow = () =>{
+       setShow(true);
+   }
+
     /* function that navigates to the home page */
     const handleClickHome = () => {
         navigate('/');
@@ -56,7 +70,8 @@ const SignUp = () => {
         const reCaptchaResponse = await fetch('/reCaptchaValidation', reCAPTCHMsg) /* send the token to the server to validate it */
         console.log(reCaptchaResponse);
         if (!reCaptchaResponse.ok) { /* if the recaptcha is not valid, alert the user */
-            alert('ReCAPTCHA verification failed');
+            setMsgModal('ReCAPTCHA verification failed');/* if the response is not ok, alert the user */
+            handleShow();
             return;
         }
 
@@ -78,14 +93,16 @@ const SignUp = () => {
 
         const response = await fetch('/signUp', requestMsg) /* send the data to the server to register the user */
         console.log(response);
-        if (!response.ok) { /* if the response is not ok, alert the user */
-            alert('Invalid Registration Details');
+        if (!response.ok) {
+            setMsgModal('Invalid Registration Details');/* if the response is not ok, alert the user */
+            handleShow();
             return;
         }
         const responseData = await response.json(); /* get the response data */
         console.log(responseData);
-        alert('Registered! Please login.') /* alert the user that the registration was successful */
-
+        /* alert the user that the registration was successful */
+        setMsgModal('Registered! Please login.');
+        handleShow();
         handleClickHome(); /* navigate to the home page */
     };
     
@@ -146,7 +163,18 @@ const SignUp = () => {
                     </div>
                 </div>
             </div>
-
+            <Modal show={showModal} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title className='msg-modal-title'>ALERT!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body><p className='msg-modal'>{msgModal}</p></Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };

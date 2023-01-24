@@ -3,3 +3,6 @@
     background-position: center;
     background-size: cover;
 }
+.msg-modal,.msg-modal-title{
+    color: black;
+}

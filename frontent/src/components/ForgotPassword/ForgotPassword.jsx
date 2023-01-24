@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { forgotPasswordSchema } from 'Validations/FormsValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
@@ -6,15 +6,30 @@ import { useNavigate  } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ForgotPassword.css';
 
+import Popup from 'reactjs-popup';
+import { Modal, Button } from "react-bootstrap";
+
 /* Forgot Password Component */
 const ForgotPassword = () => {
 
     const navigate = useNavigate(); /* define hook to navigate to other pages */
+    const [showModal, setShow] = useState(false);/*define state for the modal box */
+    const [msgModal, setMsgModal] = useState('');/*define state for the message modal box */
 
     /* function that navigate to the signUp page */
     const handleClickSignUp = () => {
         navigate('/signUp');
     };
+
+    /* function that close the modal and reset the message modal*/
+    const handleClose = () =>{
+        setShow(false);
+        setMsgModal('');
+   }
+   /* function that open the modal and displays it*/
+   const handleShow = () =>{
+       setShow(true);
+   }
 
     /* function that navigate to the logIn page */
     const handleClickLogIn = () => {
@@ -51,14 +66,15 @@ const ForgotPassword = () => {
         const response = await fetch('/forgotPassword', requestMsg)
         console.log(response);
         if (!response.ok) { /* if the response is not ok, alert the user */
-            alert('Invalid Details');
+            setMsgModal('Invalid Details');/* if the response is not ok, alert the user */
+            handleShow();
             return;
         }
         /* if the response is ok, alert the user */
         const responseData = await response.json();
         console.log(responseData);
-        alert('Sent! Check your mail.')
-
+        setMsgModal('Sent! Check your mail.');/* if the response is not ok, alert the user */
+        handleShow();
         handleClickHome();
     };
 
@@ -103,7 +119,18 @@ const ForgotPassword = () => {
                 </div>
 
             </div>
-
+            <Modal show={showModal} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title className='msg-modal-title'>ALERT!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body><p className='msg-modal'>{msgModal}</p></Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };
