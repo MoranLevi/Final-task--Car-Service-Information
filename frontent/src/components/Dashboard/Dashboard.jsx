@@ -7,42 +7,48 @@ import imageDelete from '../../images/delete-car-image.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Dashboard.css';
 
+/* Dashboard Component */
 const Dashboard = () => {
     
-    const navigate = useNavigate();
-    const [carsTableData, setCarsTableData] = useState([]);
+    const navigate = useNavigate(); /* define hook to navigate to other pages */
+    const [carsTableData, setCarsTableData] = useState([]); /* define state to save the cars data */
 
     const storedUser = localStorage.getItem('user');
-        if(!storedUser) {
-            navigate('*');
-        }
-    const user = JSON.parse(storedUser);
+    if(!storedUser) { 
+        navigate('*'); /* if the user is not exists in local storage, navigate to the 404 page */
+    }
+    const user = JSON.parse(storedUser); /* else get the user data from local storage */
 
     useEffect(() => {
         // Check for a stored session in local storage
         const storedConnected = localStorage.getItem('connected');
         if (!storedConnected) {
-            navigate('*');
+            navigate('*'); /* if the user is not logged in, navigate to the 404 page */
         }
         
+        /* else get the cars data from the server */
         async function fetchData() {
-            const response = await fetch('/getCarsData');
-            const json = await response.json();
-            setCarsTableData(json);
+            const response = await fetch('/getCarsData'); /* send request to the server */
+            const json = await response.json(); /* get the response from the server */
+            setCarsTableData(json); /* save the cars data in the carsTableData state */
             console.log(json);
         }
         fetchData();
 
     }, []); // Only run this effect once
 
+    /* function that navigate to the addNewCarService page when click on edit specific car service*/
     const onClickEdit = (row) => {
         console.log('Edit button clicked for car with treatment number: ', row.original.treatmentNumber);
-        localStorage.setItem('carService', JSON.stringify(row.original));
-        navigate('/editCarService');
+        localStorage.setItem('carService', JSON.stringify(row.original)); /* save the car service data that choose to edit in local storage */
+        navigate('/editCarService'); /* navigate to the editCarService page */
     }
 
+    /* function that delete the specific car service when click on delete specific car service*/
     const onClickDelete = async (row) => {
         console.log('Delete button clicked for car with treatment number: ', row.original.treatmentNumber);
+        
+        /* send request to the server to delete the specific car service */
         await fetch('/deleteCar', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -50,13 +56,15 @@ const Dashboard = () => {
                 treatmentNumber:   row.original.treatmentNumber,
             })
         })
-       window.location.reload(false)
+       window.location.reload(false) /* reload the page after delete car service*/
     }
 
+    /* function that navigate to the addNewCarService page when click on add new car service*/
     const handleClickAddNewCarService = () => {
         navigate('/addNewCarService');
     };
 
+    /* function that implement log out- remove the coonected, user, session from the local storage and move to the home page */
     const handleOnClickLogOut = () => {
         localStorage.removeItem('connected');
         localStorage.removeItem('user');
@@ -64,6 +72,7 @@ const Dashboard = () => {
         navigate('/');
     }
 
+    /* define the columns of the cars service table */
     const tableColumns = useMemo(
         () => [
             {
@@ -77,7 +86,7 @@ const Dashboard = () => {
             {
                 Header: 'Date',
                 accessor: 'dateT',
-                Cell: ({ cell: { row } }) => {
+                Cell: ({ cell: { row } }) => { /* define the date format */
                     const date = new Date(row.original.dateT);
                     const day = date.getDate();
                     const month = date.getMonth() + 1;
@@ -101,10 +110,10 @@ const Dashboard = () => {
                 accessor: 'action',
                 Cell: row => (
                     <div>
-                        <button onClick={() => onClickEdit(row.row)} className='button-image'>
+                        <button onClick={() => onClickEdit(row.row)} className='button-image'> {/* define the edit button */}
                             <img src={imageEdit} alt="image-button" style={{ width: '30px', height: '30px' }}/>
                         </button>
-                        <button onClick={(e) => onClickDelete(row.row)} className='button-image'>
+                        <button onClick={(e) => onClickDelete(row.row)} className='button-image'> {/* define the delete button */}
                             <img src={imageDelete} alt="image-button" style={{ width: '30px', height: '30px' }}/>
                         </button>
                     </div>     
@@ -144,27 +153,6 @@ const Dashboard = () => {
                                             <span className="mr-2 d-none d-lg-inline text-gray-600 big">{`${user?.firstName} ${user?.lastName}`}</span>
                                             <img className="img-profile rounded-circle" src={imageProfile} style={{ width: '45px', height: '40px' }}/>
                                         </a>
-                                        {/* Dropdown - User Information */}
-                                        <div className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                            aria-labelledby="userDropdown">
-                                            <a className="dropdown-item" href="#">
-                                                <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                                Profile
-                                            </a>
-                                            <a className="dropdown-item" href="#">
-                                                <i className="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                                Settings
-                                            </a>
-                                            <a className="dropdown-item" href="#">
-                                                <i className="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                                Activity Log
-                                            </a>
-                                            <div className="dropdown-divider"></div>
-                                            <a className="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                                <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                                Logout
-                                            </a>
-                                        </div>
                                     </li>
                                 </ul>
                             </nav>
@@ -175,15 +163,9 @@ const Dashboard = () => {
 
                                 {/* Page Heading */}
                                 <h1 className="h3 mb-2 text-gray-800">Car Service Table</h1>
-                                {/* <p className="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
-                                    For more information about DataTables, please visit the <a target="_blank"
-                                        href="https://datatables.net">official DataTables documentation</a>.</p> */}
                                 <button className="mb-4 btn btn-primary" onClick={handleClickAddNewCarService}>Add New Car Service</button>
-                                {/* DataTales Example */}
+
                                 <div className="card shadow mb-4">
-                                    {/* <div className="card-header py-3">
-                                        <h6 className="m-0 font-weight-bold text-primary">DataTables Example</h6>
-                                    </div> */}
                                     <div className="card-body">
                                         <div className="table-responsive">
                                             <table className="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -192,21 +174,10 @@ const Dashboard = () => {
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                             {/* /.container-fluid */}
                         </div>
                         {/* End of Main Content */}
-
-                        {/* Footer */}
-                        {/* <footer className="sticky-footer bg-white">
-                            <div className="container my-auto">
-                                <div className="copyright text-center my-auto">
-                                    <span>Copyright &copy; Your Website 2020</span>
-                                </div>
-                            </div>
-                        </footer> */}
-                        {/* End of Footer */}
 
                     </div>
                     {/* End of Content Wrapper */}
@@ -218,26 +189,6 @@ const Dashboard = () => {
                 <a className="scroll-to-top rounded" href="#page-top">
                     <i className="fas fa-angle-up"></i>
                 </a>
-
-                {/* Logout Modal*/}
-                <div className="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                    aria-hidden="true">
-                    <div className="modal-dialog" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                                <button className="close" type="button" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                            </div>
-                            <div className="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                            <div className="modal-footer">
-                                <button className="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                                <a className="btn btn-primary" href="login.html">Logout</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
         </div>
     </div>
     );
