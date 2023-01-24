@@ -3,6 +3,7 @@ import image from '../../images/error-404-image.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Page404.css';
 
+/* Page 404 Component */
 const Page404 = () => {
     
     return (

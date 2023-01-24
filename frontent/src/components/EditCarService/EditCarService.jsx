@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate  } from 'react-router-dom';
 import { editcarServiceSchema } from 'Validations/FormsValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -6,26 +6,34 @@ import { useForm } from 'react-hook-form';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './EditCarService.css';
 
+/* Edit Car Service Component 
+   A component that add edit car service in the database*/
 const EditCarService = () => {
-    const navigate = useNavigate();
+
+    const navigate = useNavigate(); /* define hook to navigate to other pages */
 
     const storedCarService = localStorage.getItem('carService');
         if(!storedCarService) {
-            navigate('*');
+            navigate('*'); /* if the car service data not found, navigate to the 404 page */
         }
-    const carService = JSON.parse(storedCarService);
+    const carService = JSON.parse(storedCarService); /* get the car service data from the local storage */
 
+    /* function that clear the carService that found in loocal storage and navigate to the dashboard */
     const handleClickDashboard = () => {
-        localStorage.removeItem('carService'); // clear local storage
+        localStorage.removeItem('carService'); /* clear local storage */
         navigate('/dashboard');
     };
 
+    /* define useForm for the editCarService form */
     const { register, handleSubmit, formState: { errors }} = useForm({
-        resolver: yupResolver(editcarServiceSchema),
-        mode: "onChange"
+        resolver: yupResolver(editcarServiceSchema), /* validate the form with the schema */
+        mode: "onChange" /* validate the form on change */
     });
 
+    /* function that submit the form and send the data to the server */
     const submitForm = async (data, e) => {
+
+        /* define the request message */
         const requestMsg = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -42,16 +50,19 @@ const EditCarService = () => {
 
         console.log("requesting");
 
-        const response = await fetch('/editCarService', requestMsg)
+        const response = await fetch('/editCarService', requestMsg) /* send the request to the server */
         console.log(response);
-        if (!response.ok) {
+        if (!response.ok) { /* if the response is not ok, alert the user */
             alert('Invalid Car Service Details');
             return;
         }
+
+        /* get the response from the server */
         const responseData = await response.json();
         console.log(responseData);
         alert('Edit Car Service Successfully')
 
+        /* navigate to the dashboard page */
         handleClickDashboard();
     };
 
@@ -69,25 +80,23 @@ const EditCarService = () => {
                                 </div>
                                 <form className="user" onSubmit={handleSubmit(submitForm)}>
                                     <div className="form-group row">
-                                        {/* <div className="col-sm-6 mb-3 mb-sm-0"> */}
                                         <div className="col-sm-6">
                                             <input type="text" className="form-control form-control-user" name="treatmentNumber"
                                                 placeholder="Treatment Number" value={carService.treatmentNumber} {...register('treatmentNumber')}/>
-                                            {errors.treatmentNumber ? <p className='error-msg'>{errors.treatmentNumber?.message}</p> : <br/>}
+                                            {errors.treatmentNumber ? <p className='error-msg'>{errors.treatmentNumber?.message}</p> : <br/>} {/* display error message if the treatment number is not valid */}
                                         </div>
                                         <div className="col-sm-6">
                                             <input type="text" className="form-control form-control-user" name="treatmentInformation"
                                                 placeholder="Treatment Information" defaultValue={carService.treatmentInfo} {...register('treatmentInformation')}/>
-                                            {errors.treatmentInformation ? <p className='error-msg'>{errors.treatmentInformation?.message}</p> : <p className='space'>{'.'}</p>}
+                                            {errors.treatmentInformation ? <p className='error-msg'>{errors.treatmentInformation?.message}</p> : <p className='space'>{'.'}</p>} {/* display error message if the treatment information is not valid */}
                                         </div>
                                     </div>
                                     <div className="form-group">
                                         <input type="email" className="form-control form-control-user" name="workerEmail"
                                             placeholder="Worker Email" defaultValue={carService.workerEmail} {...register('workerEmail')}/>
-                                        {errors.workerEmail ? <p className='error-msg'>{errors.workerEmail?.message}</p> : <br/>}
+                                        {errors.workerEmail ? <p className='error-msg'>{errors.workerEmail?.message}</p> : <br/>} {/* display error message if the worker email is not valid */}
                                     </div>
                                     <div className="form-group row">
-                                        {/* <div className="col-sm-6 mb-3 mb-sm-0"> */}
                                         <div className="col-sm-6">
                                             <input type="datetime-local" name="date" className="form-control form-control-user"
                                                 defaultValue={carService.dateT.toString().slice(0, -8)} {...register('date')} required/>
@@ -95,11 +104,11 @@ const EditCarService = () => {
                                         <div className="col-sm-6">
                                             <input type="text" className="form-control form-control-user" name="carNumber"
                                                 placeholder="Car Number" defaultValue={carService.carNumber} {...register('carNumber')}/>
-                                            {errors.carNumber ? <p className='error-msg'>{errors.carNumber?.message}</p> : <p className='space'>{'.'}</p>}
+                                            {errors.carNumber ? <p className='error-msg'>{errors.carNumber?.message}</p> : <p className='space'>{'.'}</p>} {/* display error message if the car number is not valid */}
                                         </div>
 
                                     </div>
-                                    <input type="submit" className="btn btn-primary btn-user btn-block" value={'Edit Car'}></input>
+                                    <input type="submit" className="btn btn-primary btn-user btn-block" value={'Edit Car'}></input> {/* submit button */}
                                 </form>
                             </div>
                         </div>

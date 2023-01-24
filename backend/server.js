@@ -3,15 +3,15 @@ const express = require('express')
 const cors = require('cors');
 const nodemailer =require('nodemailer');
 const axios = require('axios');
-const dotenv = require('dotenv').config()
 const { USERS_TABLE, CARS_TABLE } = require('./DatabaseTables')
 
-const app = express()
-const port =  process.env.PORT || 8000
+const app = express() // Create express app
+const port =  process.env.PORT || 8000 // Port to listen on
 
 app.use(express.json());
-app.use(cors());
+app.use(cors()); 
 
+// Define object with db config data
 const db_config = {
     user: "admin1",
     host: "carservicedb.cj9a9lermuhv.us-east-1.rds.amazonaws.com",
@@ -23,7 +23,7 @@ let databaseConnection
 
 // Create connection to mySql
 function handleDisconnect() {
-    databaseConnection = mysql.createConnection(db_config)
+    databaseConnection = mysql.createConnection(db_config) 
 
     // The server is either down or restarting (takes a while sometimes).
     databaseConnection.connect((err) => {
@@ -48,30 +48,33 @@ function handleDisconnect() {
 
 handleDisconnect();
 
+/* POST request to login */
 app.post('/logIn', (req, res) => {
     console.log("POST login")
 
-    if (req.body.title !== "LogIn") {
+    if (req.body.title !== "LogIn") { // check if the request is valid
         res.status(400)
         res.send("Bad Login Request.")
         return
     }
 
+    /* retrieve user from db */
     const query = `SELECT * FROM ${USERS_TABLE.name} WHERE ${USERS_TABLE.columns.email} = ? AND ${USERS_TABLE.columns.password} = ?`
     databaseConnection.query(query, [req.body.email, req.body.password],
         (err, result) => {
-            if (err) {
+            if (err) { // check if there is an error
                 res.status(500)//Internal server error
                 res.send(err)
                 return
             }
 
-            if (result.length === 0) {
+            if (result.length === 0) { 
                 res.status(400)//bad request
                 res.send("Invalid login parameters.")
                 return
             }
 
+            // define the response message
             const resMsg = {
                 method: 'GET',
                 headers: {'Content-Type': 'application/json'},
@@ -84,14 +87,15 @@ app.post('/logIn', (req, res) => {
                     })
             }
             res.type('application/json')
-            res.send(resMsg)
+            res.send(resMsg) // send the response
         })
 })
 
+/* POST request to sign up */
 app.post('/signUp', (req, res) => {
     console.log("POST Sign-Up")
 
-    if (req.body.title !== "SignUp") {
+    if (req.body.title !== "SignUp") { // check if the request is valid
         res.status(400)
         res.send("Bad Request.")
         return
@@ -101,12 +105,12 @@ app.post('/signUp', (req, res) => {
     const query = `SELECT * FROM ${USERS_TABLE.name} WHERE ${USERS_TABLE.columns.email} = ?`
     databaseConnection.query(query, [req.body.email],
         (err, result) => {
-            if (err) {
+            if (err) { // check if there is an error
                 res.status(500)
                 res.send(err)
                 return
             }
-            if (result.length !== 0) {
+            if (result.length !== 0) { // check if the user exist
                 res.status(400)
                 res.send("Email already exists")
                 return
@@ -117,7 +121,7 @@ app.post('/signUp', (req, res) => {
             console.log(query)
             databaseConnection.query(query,
                 (err, result) => {
-                    if (err) {
+                    if (err) { // check if there is an error
                         res.status(500)
                         res.send(err)
                         throw err
@@ -152,6 +156,7 @@ app.post('/signUp', (req, res) => {
                         console.log("sent: "+info.response);
                     })
 
+                    // define the response message
                     const signUpMsg = {
                         method: 'GET',
                         headers: {'Content-Type': 'application/json'},
@@ -163,15 +168,16 @@ app.post('/signUp', (req, res) => {
                     }
 
                     res.type('application/json')
-                    res.send(signUpMsg)
+                    res.send(signUpMsg) // send the response
                 })
         })
 })
 
+/* POST request to forgot password */
 app.post('/forgotPassword', (req, res) => {
     console.log("POST Forgot")
 
-    if (req.body.title !== "ForgotPassword") {
+    if (req.body.title !== "ForgotPassword") { // check if the request is valid
         res.status(400)
         res.send("Bad Request.")
         return
@@ -181,18 +187,19 @@ app.post('/forgotPassword', (req, res) => {
     const query = `SELECT * FROM ${USERS_TABLE.name} WHERE ${USERS_TABLE.columns.email} = ?`
     databaseConnection.query(query, [req.body.email],
         (err, result) => {
-            if (err) {
+            if (err) { // check if there is an error
                 res.status(500)
                 res.send(err)
                 return
             }
-            if (result.length == 0) {
+            if (result.length == 0) { // check if the user doesn't exist
                 res.status(400)
                 console.log("125")
                 res.send("Email DOESN'T exists")
                 return
             }
 
+            // create transport for the email
             let transporter = nodemailer.createTransport({
                 service: 'hotmail',
                 auth: {
@@ -202,6 +209,7 @@ app.post('/forgotPassword', (req, res) => {
                 tls : { rejectUnauthorized: false }
             });
 
+            // define the email
             let mailOptions ={
                 from:'yassmineMoran@hotmail.com',
                 to: req.body.email,
@@ -209,6 +217,7 @@ app.post('/forgotPassword', (req, res) => {
                 text: 'Hello,\nEnter the following link to reset password:\nhttp://localhost:3000/#/resetPassword'
             };
 
+            // send the email
             transporter.sendMail(mailOptions, function(err,info){
                 if(err){
                     console.log(err);
@@ -217,6 +226,7 @@ app.post('/forgotPassword', (req, res) => {
                 console.log("sent: "+info.response);
             })
 
+            // define the response message
             const forgotPasswordMsg = {
                 method: 'GET',
                 headers: {'Content-Type': 'application/json'},
@@ -228,24 +238,24 @@ app.post('/forgotPassword', (req, res) => {
             }
 
             res.type('application/json')
-            res.send(forgotPasswordMsg)
+            res.send(forgotPasswordMsg) // send the response
         })
 })
 
+/* POST request to reset password */
 app.post('/resetPassword', (req, res) => {
     console.log("POST resetPassword")
 
-    if (req.body.title !== "ResetPassword") {
+    if (req.body.title !== "ResetPassword") { // check if the request is valid
         res.status(400)
         res.send("Bad Reset Password Request.")
         return
     }
 
-    //const query = `SELECT * FROM ${USERS_TABLE.name} WHERE ${USERS_TABLE.columns.email} = ? AND ${USERS_TABLE.columns.password} = ?`
     const query = `UPDATE ${USERS_TABLE.name} SET ${USERS_TABLE.columns.password} = ? WHERE ${USERS_TABLE.columns.email} = ?`
     databaseConnection.query(query, [req.body.password,req.body.email],
         (err, result) => {
-            if (err) {
+            if (err) { // check if there is an error
                 res.status(500)//Internal server error
                 res.send(err)
                 return
@@ -253,11 +263,11 @@ app.post('/resetPassword', (req, res) => {
 
             if (result.affectedRows === 0) {
                 res.status(400)//bad request
-                
                 res.send("Invalid email parameters.")
                 return
             }
 
+            // define the response message
             const resetPasswordMsg = {
                 method: 'GET',
                 headers: {'Content-Type': 'application/json'},
@@ -268,29 +278,30 @@ app.post('/resetPassword', (req, res) => {
                     })
             }
             res.type('application/json')
-            res.send(resetPasswordMsg)
+            res.send(resetPasswordMsg) // send the response
         })
 })
 
+/* POST request to reCAPTCHA */
 app.post('/reCaptchaValidation', async (req, res) => {
     console.log("POST reCAPTCHA")
 
-    if (req.body.title !== "reCAPTCHA") {
+    if (req.body.title !== "reCAPTCHA") { // check if the request is valid
         res.status(400)
         res.send("Bad Login Request.")
         return
     }
 
-    //Destructuring response token from request body
+    // Destructuring response token from request body
     const token = req.body.token;
 
     await axios.post(
         `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`
     );
 
-    if (res.status(200)) {
+    if (res.status(200)) { // if the request is valid
         console.log('reCAPTCHA verification succeeded');
-        const reCAPTCHAMsg = {
+        const reCAPTCHAMsg = { // define the response message
         method: 'GET',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(
@@ -300,9 +311,9 @@ app.post('/reCaptchaValidation', async (req, res) => {
             })
         }
         res.type('application/json')
-        res.send(reCAPTCHAMsg)
+        res.send(reCAPTCHAMsg) // send the response
         return
-    }else{
+    }else{ // if the request is invalid
         console.log('reCAPTCHA verification failed');
         res.status(400)
         res.send("ReCAPTCHA verification failed")
@@ -310,36 +321,38 @@ app.post('/reCaptchaValidation', async (req, res) => {
     }
 })
 
+/* GET request to cars data */
 app.get('/getCarsData', (req, res) => {
-    console.log(`GET cars table`)
+    console.log(`GET cars service table`)
 
-    // res.header('Access-Control-Allow-Origin', '*')
     var query = `SELECT * FROM ${CARS_TABLE.name}`
     databaseConnection.query(query, (err, result) => {
-        if (err) {
+        if (err) { // check if there is an error
             console.log(err)
             throw err
         }
-        res.send(result)
+        res.send(result) // send the response
     })
 })
 
+/* POST request to delete car from table */
 app.post('/deleteCar', (req, res) => {
     console.log(`Delete car from table`)
-    // res.header('Access-Control-Allow-Origin', '*')
+
     const query = `Delete FROM ${CARS_TABLE.name} WHERE ${CARS_TABLE.columns.treatmentNumber} = ?`
     databaseConnection.query(query, [req.body.treatmentNumber], (err, result) => {
-        if (err) {
+        if (err) { // check if there is an error
             throw err
         }
-        res.send(result)
+        res.send(result) // send the response
     })
 })
 
+/* POST request to add new car service */
 app.post('/addNewCarService', (req, res) => {
     console.log("POST Add-New-Car-Service")
 
-    if (req.body.title !== "AddNewCarService") {
+    if (req.body.title !== "AddNewCarService") { // check if the request is valid
         res.status(400)
         res.send("Bad Request.")
         return
@@ -349,7 +362,7 @@ app.post('/addNewCarService', (req, res) => {
     const query = `SELECT * FROM ${CARS_TABLE.name} WHERE ${CARS_TABLE.columns.treatmentNumber} = ?`
     databaseConnection.query(query, [req.body.treatmentNumber],
         (err, result) => {
-            if (err) {
+            if (err) { // check if there is an error
                 res.status(500)
                 res.send(err)
                 return
@@ -365,7 +378,7 @@ app.post('/addNewCarService', (req, res) => {
             console.log(query)
             databaseConnection.query(query,
                 (err, result) => {
-                    if (err) {
+                    if (err) { // check if there is an error
                         res.status(500)
                         res.send(err)
                         throw err
@@ -377,6 +390,7 @@ app.post('/addNewCarService', (req, res) => {
                         return
                     }
 
+                    // define the response message
                     const addNewCarServiceMsg = {
                         method: 'GET',
                         headers: {'Content-Type': 'application/json'},
@@ -388,15 +402,16 @@ app.post('/addNewCarService', (req, res) => {
                     }
 
                     res.type('application/json')
-                    res.send(addNewCarServiceMsg)
+                    res.send(addNewCarServiceMsg) // send the response
                 })
         })
 })
 
+/* POST request to edit car service */
 app.post('/editCarService', (req, res) => {
     console.log("POST editCarService")
 
-    if (req.body.title !== "EditCarService") {
+    if (req.body.title !== "EditCarService") { // check if the request is valid
         res.status(400)
         res.send("Bad Reset Password Request.")
         return
@@ -407,7 +422,7 @@ app.post('/editCarService', (req, res) => {
         (err, result) => {
             console.log("result: ", query)
             console.log("fff", req.body.treatmentInfo,req.body.dateT, req.body.workerEmail, req.body.carNumber, req.body.treatmentNumber)
-            if (err) {
+            if (err) { // check if there is an error
                 console.log(err)
                 res.status(500)//Internal server error
                 res.send(err)
@@ -420,6 +435,7 @@ app.post('/editCarService', (req, res) => {
                 return
             }
 
+            // define the response message
             const editCarServiceMsg = {
                 method: 'GET',
                 headers: {'Content-Type': 'application/json'},
@@ -430,10 +446,11 @@ app.post('/editCarService', (req, res) => {
                     })
             }
             res.type('application/json')
-            res.send(editCarServiceMsg)
+            res.send(editCarServiceMsg) // send the response
         })
 })
 
+/* listen to port */
 app.listen(port, () => {
     console.log(`Car-Service server listening on http://localhost:${port}`)
 })
