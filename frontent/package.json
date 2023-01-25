@@ -1,5 +1,5 @@
 {
-  "proxy": "https://server-two-delta.vercel.app",
+  "proxy": "https://car-service-information-server.vercel.app/",
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
