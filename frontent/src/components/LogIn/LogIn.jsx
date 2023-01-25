@@ -18,6 +18,7 @@ const LogIn = () => {
     const [rememberMe, setRememberMe] = useState(0);/* define state for the remember me checkbox */
     const [showModal, setShow] = useState(false);/*define state for the modal box */
     const [msgModal, setMsgModal] = useState('');/*define state for the message modal box */
+    const [reCAPTCHAValue, setReCAPTCHAValue] = useState(0);
     const captchaRef = useRef(null); /* define ref for the captcha */
 
 
@@ -61,6 +62,10 @@ const LogIn = () => {
         navigate('/dashboard');
     };
     
+    const onChangeRecap=(value)=> {
+        setReCAPTCHAValue(value);
+    }
+
     /* define useForm for the logIn form */
     const { register, handleSubmit, formState: { errors }} = useForm({
         resolver: yupResolver(logInSchema), /* validate the form with the schema */
@@ -77,35 +82,40 @@ const LogIn = () => {
             navigate('/dashboard'); 
         }
 
+        if(reCAPTCHAValue===0){
+            setStatus("You must solve the ReCAPTCHA");
+            return;
+        }
+        
         /* if the session is not stored */
 
         /* check if the recaptcha is valid */
-        const token = captchaRef.current.getValue();
-        captchaRef.current.reset();
+        // const token = captchaRef.current.getValue();
+        // captchaRef.current.reset();
 
         /* define the recaptch request message */
-        const reCAPTCHMsg = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(
-                {
-                    title:     'reCAPTCHA',
-                    token:     token
-                })
-        };
+        // const reCAPTCHMsg = {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify(
+        //         {
+        //             title:     'reCAPTCHA',
+        //             token:     token
+        //         })
+        // };
         
         console.log("requesting");
 
-        const reCaptchaResponse = await fetch('/reCaptchaValidation', reCAPTCHMsg) /* send the token to the server to validate it */
-        console.log(reCaptchaResponse);
-        if (!reCaptchaResponse.ok) {
-            console.log("hhhhhhhhhhhhhhh",reCaptchaResponse)
-			/* if the recaptcha is not valid, alert the user */
-           setMsgModal('ReCAPTCHA verification failed')
-           handleShow()
+        // const reCaptchaResponse = await fetch('/reCaptchaValidation', reCAPTCHMsg) /* send the token to the server to validate it */
+        // console.log(reCaptchaResponse);
+        // if (!reCaptchaResponse.ok) {
+        //     console.log("hhhhhhhhhhhhhhh",reCaptchaResponse)
+		// 	/* if the recaptcha is not valid, alert the user */
+        //    setMsgModal('ReCAPTCHA verification failed')
+        //    handleShow()
 
-            return;
-        }
+        //     return;
+        // }
 
         /* define the logIn request message */
         const requestMsg = {
@@ -184,6 +194,7 @@ const LogIn = () => {
 
                                                 sitekey="6Le9migkAAAAAHAzyMzJLLRN5b4LZPYOsbqjzE4J"
                                                 ref={captchaRef}
+                                                onChange={onChangeRecap}
                                             /></center>
                                             <input type="submit" className="btn btn-primary btn-user btn-block" value={'Login'}></input>
                                             <hr/>
