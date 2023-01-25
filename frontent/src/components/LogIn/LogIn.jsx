@@ -83,7 +83,10 @@ const LogIn = () => {
         }
 
         if(reCAPTCHAValue===0){
-            setStatus("You must solve the ReCAPTCHA");
+            setStatus("ReCAPTCHA verification failed");
+            setMsgModal('ReCAPTCHA verification failed')
+           handleShow()
+
             return;
         }
         

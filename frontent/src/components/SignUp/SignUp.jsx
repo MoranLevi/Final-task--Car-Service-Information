@@ -18,6 +18,7 @@ const SignUp = () => {
     const navigate = useNavigate(); /* define hook to navigate to other pages */
     const [showModal, setShow] = useState(false);/*define state for the modal box */
     const [msgModal, setMsgModal] = useState('');/*define state for the message modal box */
+    const [reCAPTCHAValue, setReCAPTCHAValue] = useState(0);
     const captchaRef = useRef(null); /* define ref for the reCAPTCHA */
     
 
@@ -42,6 +43,10 @@ const SignUp = () => {
         navigate('/logIn');
     };
     
+    const onChangeRecap=(value)=> {
+        setReCAPTCHAValue(value);
+    }
+
     /* define useForm for the signUp form */
     const { register, handleSubmit, formState: { errors }} = useForm({
         resolver: yupResolver(signUpSchema), /* validate the form with the schema */
@@ -52,30 +57,37 @@ const SignUp = () => {
     const submitForm = async (data, e) => {
         e.preventDefault();
 
+        if(reCAPTCHAValue===0){
+            setStatus("ReCAPTCHA verification failed");
+            setMsgModal('ReCAPTCHA verification failed')
+           handleShow()
+
+            return;
+        }
         /* get the token from the reCAPTCHA */
-        const token = captchaRef.current.getValue();
-        captchaRef.current.reset();
+        // const token = captchaRef.current.getValue();
+        // captchaRef.current.reset();
 
         /* define the recaptch request message */
-        const reCAPTCHMsg = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(
-                {
-                    title:     'reCAPTCHA',
-                    token:     token
-                })
-        };
+        // const reCAPTCHMsg = {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify(
+        //         {
+        //             title:     'reCAPTCHA',
+        //             token:     token
+        //         })
+        // };
         
         console.log("requesting");
 
-        const reCaptchaResponse = await fetch('/reCaptchaValidation', reCAPTCHMsg) /* send the token to the server to validate it */
-        console.log(reCaptchaResponse);
-        if (!reCaptchaResponse.ok) { /* if the recaptcha is not valid, alert the user */
-            setMsgModal('ReCAPTCHA verification failed');/* if the response is not ok, alert the user */
-            handleShow();
-            return;
-        }
+        // const reCaptchaResponse = await fetch('/reCaptchaValidation', reCAPTCHMsg) /* send the token to the server to validate it */
+        // console.log(reCaptchaResponse);
+        // if (!reCaptchaResponse.ok) { /* if the recaptcha is not valid, alert the user */
+        //     setMsgModal('ReCAPTCHA verification failed');/* if the response is not ok, alert the user */
+        //     handleShow();
+        //     return;
+        // }
 
         /* define the signUp request message */
         const requestMsg = {
@@ -152,6 +164,7 @@ const SignUp = () => {
                                     </div>
                                     <center className='margin-bottom-ReCAPTCHA'><ReCAPTCHA /* display the reCAPTCHA */
                                         sitekey="6Le9migkAAAAAHAzyMzJLLRN5b4LZPYOsbqjzE4J"
+                                        onChange={onChangeRecap}
                                         ref={captchaRef}/>
                                     </center>
                                     <input type="submit" className="btn btn-primary btn-user btn-block" value={'Register Account'}></input> 
