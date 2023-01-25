@@ -99,6 +99,7 @@ const LogIn = () => {
         const reCaptchaResponse = await fetch('/reCaptchaValidation', reCAPTCHMsg) /* send the token to the server to validate it */
         console.log(reCaptchaResponse);
         if (!reCaptchaResponse.ok) {
+            console.log("hhhhhhhhhhhhhhh",reCaptchaResponse)
 			/* if the recaptcha is not valid, alert the user */
            setMsgModal('ReCAPTCHA verification failed')
            handleShow()
