@@ -20,6 +20,7 @@ const SignUp = () => {
     const [msgModal, setMsgModal] = useState('');/*define state for the message modal box */
     const captchaRef = useRef(null); /* define ref for the reCAPTCHA */
     
+
     /* function that close the modal and reset the message modal*/
     const handleClose = () =>{
         setShow(false);
@@ -34,6 +35,7 @@ const SignUp = () => {
     const handleClickHome = () => {
         navigate('/');
     };
+
 
     /* function that navigates to the log in page */
     const handleClickLogIn = () => {
@@ -149,7 +151,7 @@ const SignUp = () => {
                                         </div>
                                     </div>
                                     <center className='margin-bottom-ReCAPTCHA'><ReCAPTCHA /* display the reCAPTCHA */
-                                        sitekey={/*process.env.REACT_APP_RECAPTCHA_SITE_KEY*/'6LcB6yQkAAAAAOSd_9Ft1zPR2Gn4Ez8Ae8e0caty'}
+                                sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
                                         ref={captchaRef}/>
                                     </center>
                                     <input type="submit" className="btn btn-primary btn-user btn-block" value={'Register Account'}></input> 
