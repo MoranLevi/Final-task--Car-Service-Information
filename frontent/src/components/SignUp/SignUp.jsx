@@ -8,8 +8,6 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './SignUp.css';
 import '../../css/sb-admin-2.css';
-
-import Popup from 'reactjs-popup';
 import { Modal, Button } from "react-bootstrap";
 
 /* SignUp Component */
@@ -19,6 +17,7 @@ const SignUp = () => {
     const [showModal, setShow] = useState(false);/*define state for the modal box */
     const [msgModal, setMsgModal] = useState('');/*define state for the message modal box */
     const [reCAPTCHAValue, setReCAPTCHAValue] = useState(0);
+    const [status, setStatus] = useState("");
     const captchaRef = useRef(null); /* define ref for the reCAPTCHA */
     
 

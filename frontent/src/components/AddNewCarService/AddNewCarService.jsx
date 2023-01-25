@@ -5,9 +5,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './AddNewCarService.css';
-
-
-import Popup from 'reactjs-popup';
 import { Modal, Button } from "react-bootstrap";
 
 /* Add New Car Service Component

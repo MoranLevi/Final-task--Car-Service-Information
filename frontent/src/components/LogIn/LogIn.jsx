@@ -7,9 +7,6 @@ import md5 from 'md5';
 import ReCAPTCHA from 'react-google-recaptcha';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './LogIn.css';
-
-
-import Popup from 'reactjs-popup';
 import { Modal, Button } from "react-bootstrap";
 
 /* LogIn Component */
@@ -20,6 +17,7 @@ const LogIn = () => {
     const [msgModal, setMsgModal] = useState('');/*define state for the message modal box */
     const [reCAPTCHAValue, setReCAPTCHAValue] = useState(0);
     const captchaRef = useRef(null); /* define ref for the captcha */
+    const [status, setStatus] = useState("");
 
 
     useEffect(() => {
