@@ -181,7 +181,7 @@ const LogIn = () => {
                                             </div>
                                             <center className='margin-bottom-ReCAPTCHA'><ReCAPTCHA /* ReCAPTCHA component */
 
-                                                sitekey="6LdyfigkAAAAAFDFkz5qg2ROriCv7jwebiwknMXh"
+                                                sitekey="6LeLhSgkAAAAADVvrCx-SHXm9WABZuR-lxfszuX0"
                                                 ref={captchaRef}
                                             /></center>
                                             <input type="submit" className="btn btn-primary btn-user btn-block" value={'Login'}></input>
