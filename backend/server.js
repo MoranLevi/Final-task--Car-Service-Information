@@ -132,17 +132,18 @@ app.post('/signUp', (req, res) => {
                         res.send("Invalid login parameters.")
                         return
                     }
+
                     let transporter = nodemailer.createTransport({
                         service: 'hotmail',
                         auth: {
-                            user: 'yassmineMoran@hotmail.com',
-                            pass: 'ClientServer'
+                            user: 'clientServerCourse@hotmail.com',
+                            pass: '12457890mL'
                         },
                         tls : { rejectUnauthorized: false }
                     });
         
                     let mailOptions ={
-                        from:'yassmineMoran@hotmail.com',
+                        from:'clientServerCourse@hotmail.com',
                         to: req.body.email,
                         subject: 'Welcome',
                         text: 'Hello,\nWelcome to our car service application'
@@ -177,7 +178,7 @@ app.post('/signUp', (req, res) => {
 app.post('/forgotPassword', (req, res) => {
     console.log("POST Forgot")
 
-    if (req.body.title !== "ForgotPassword") { // check if the request is valid
+    if (req.body.title !== "ForgotPassword") {
         res.status(400)
         res.send("Bad Request.")
         return
@@ -187,37 +188,34 @@ app.post('/forgotPassword', (req, res) => {
     const query = `SELECT * FROM ${USERS_TABLE.name} WHERE ${USERS_TABLE.columns.email} = ?`
     databaseConnection.query(query, [req.body.email],
         (err, result) => {
-            if (err) { // check if there is an error
+            if (err) {
                 res.status(500)
                 res.send(err)
                 return
             }
-            if (result.length == 0) { // check if the user doesn't exist
+            if (result.length == 0) {
                 res.status(400)
                 console.log("125")
                 res.send("Email DOESN'T exists")
                 return
             }
 
-            // create transport for the email
             let transporter = nodemailer.createTransport({
                 service: 'hotmail',
                 auth: {
-                    user: 'yassmineMoran@hotmail.com',
-                    pass: 'ClientServer'
+                    user: 'clientServerCourse@hotmail.com',
+                    pass: '12457890mL'
                 },
                 tls : { rejectUnauthorized: false }
             });
 
-            // define the email
             let mailOptions ={
-                from:'yassmineMoran@hotmail.com',
+                from:'clientServerCourse@hotmail.com',
                 to: req.body.email,
                 subject: 'Reset Password',
                 text: 'Hello,\nEnter the following link to reset password:\nhttp://localhost:3000/#/resetPassword'
             };
 
-            // send the email
             transporter.sendMail(mailOptions, function(err,info){
                 if(err){
                     console.log(err);
@@ -226,19 +224,18 @@ app.post('/forgotPassword', (req, res) => {
                 console.log("sent: "+info.response);
             })
 
-            // define the response message
             const forgotPasswordMsg = {
                 method: 'GET',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(
                 {
                     title: 'forgotPasswordMsg',
-                    signUpResult: 'OK',
+                    forgotPasswordResult: 'OK',
                 })
             }
 
             res.type('application/json')
-            res.send(forgotPasswordMsg) // send the response
+            res.send(forgotPasswordMsg)
         })
 })
 
