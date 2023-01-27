@@ -56,6 +56,7 @@ const SignUp = () => {
         const token = captchaRef.current.getValue();
         captchaRef.current.reset();
 
+        console.log("fff",token)
         /* define the recaptch request message */
         const reCAPTCHMsg = {
             method: 'POST',

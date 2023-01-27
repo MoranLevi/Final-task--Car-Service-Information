@@ -293,10 +293,11 @@ app.post('/reCaptchaValidation', async (req, res) => {
     }
 
     // Destructuring response token from request body
-    const token = req.body.token;
-    
+    // const token = req.body.token;
+
+    const token1 = '03AFY_a8XsJqczpWKadOj6D0440LnG6fy0-CJEZqutPeZjQRi-8N9LKLEb7fawhCCepkETnTOvy_DIay81F6mii4U7Em5Cn_yq_IVJpSHDxaGgjXD4XTdvuhBtL1FkwHGBQMyJI-zqP-7d6c90Zw3M74CUnNZpph6rEPnRVrGB1LVb_XxbICjywVFC_zULJan6pZxE1bYXmaMWKWPigECzpfTCyM8hnCmOJ4iJGOGqkTaFwqFZc2gGUrEcZBcCBrSj-MCzrpS1TIVKaJMAp0OkMJ0OLrfw_VsCNQ9fjxT-pGoZZ9RRuNE1Szq2Ooq0NI2cPvpGBocAgdqE53F64wcoq0vitGyLhdDrrPtQgUh3Rgw3JR3nIJvyjoGWS9eQ6XxKiw4bHE1Ry6y_fzm5Lrekg3RRDcYqwKJTsiU5CMP-bxgNyNiXXSJnv8g6vEggxuUc4WjeZxSvenaXHHQdbizR-r4TLKG9DIO_GK1BRXr9cZihy9IXouDPw2verpqnJV8bSyeDTB4FKVhE65BKTODHRy1PBsyddUUEKy4_okQEm3JYmX8JRVwCELc'
     await axios.post(
-        `https://www.google.com/recaptcha/api/siteverify?secret=6Le9migkAAAAADRLS4_Iyw4lBCtaWTYhXsYQJo84&response=${token}`
+        `https://www.google.com/recaptcha/api/siteverify?secret=6Le9migkAAAAADRLS4_Iyw4lBCtaWTYhXsYQJo84&response=${token1}`
     );
     console.log("after Post recap");
     if (res.status(200)) { // if the request is valid
@@ -316,7 +317,7 @@ app.post('/reCaptchaValidation', async (req, res) => {
     }else{ // if the request is invalid
         console.log('reCAPTCHA verification failed');
         res.status(400)
-        res.send("ReCAPTCHA verification failed", token)
+        res.send("ReCAPTCHA verification failed")
         return
     }
 })
