@@ -151,7 +151,7 @@ const SignUp = () => {
                                         </div>
                                     </div>
                                     <center className='margin-bottom-ReCAPTCHA'><ReCAPTCHA /* display the reCAPTCHA */
-                                        sitekey="6LeLhSgkAAAAADVvrCx-SHXm9WABZuR-lxfszuX0"
+                                        sitekey="6LdyfigkAAAAAFDFkz5qg2ROriCv7jwebiwknMXh"
                                         ref={captchaRef}/>
                                     </center>
                                     <input type="submit" className="btn btn-primary btn-user btn-block" value={'Register Account'}></input> 
