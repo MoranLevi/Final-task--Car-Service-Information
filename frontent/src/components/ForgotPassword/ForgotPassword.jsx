@@ -3,9 +3,9 @@ import { forgotPasswordSchema } from 'Validations/FormsValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate  } from 'react-router-dom';
+import { Modal, Button } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ForgotPassword.css';
-import { Modal, Button } from "react-bootstrap";
 
 /* Forgot Password Component */
 const ForgotPassword = () => {
@@ -22,6 +22,10 @@ const ForgotPassword = () => {
     /* function that close the modal and reset the message modal*/
     const handleClose = () =>{
         setShow(false);
+        if(msgModal === 'Sent! Check your mail.') {
+            setMsgModal('');
+            handleClickHome();
+        }
         setMsgModal('');
    }
    /* function that open the modal and displays it*/
@@ -73,7 +77,6 @@ const ForgotPassword = () => {
         console.log(responseData);
         setMsgModal('Sent! Check your mail.');/* if the response is not ok, alert the user */
         handleShow();
-        handleClickHome();
     };
 
     return (

@@ -3,12 +3,12 @@ import { useNavigate  } from 'react-router-dom';
 import { signUpSchema } from 'Validations/FormsValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
+import { Modal, Button } from "react-bootstrap";
 import md5 from 'md5';
 import ReCAPTCHA from 'react-google-recaptcha';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './SignUp.css';
 import '../../css/sb-admin-2.css';
-import { Modal, Button } from "react-bootstrap";
 
 /* SignUp Component */
 const SignUp = () => {
@@ -21,17 +21,16 @@ const SignUp = () => {
     /* function that close the modal and reset the message modal*/
     const handleClose = () =>{
         setShow(false);
+        if(msgModal === 'Registered! Please login.') {
+            setMsgModal('');
+            handleClickLogIn();
+        }
         setMsgModal('');
    }
    /* function that open the modal and displays it*/
    const handleShow = () =>{
        setShow(true);
    }
-
-    /* function that navigates to the home page */
-    const handleClickHome = () => {
-        navigate('/');
-    };
 
     /* function that navigates to the log in page */
     const handleClickLogIn = () => {
@@ -101,7 +100,6 @@ const SignUp = () => {
         /* alert the user that the registration was successful */
         setMsgModal('Registered! Please login.');
         handleShow();
-        handleClickHome(); /* navigate to the home page */
     };
     
     return (

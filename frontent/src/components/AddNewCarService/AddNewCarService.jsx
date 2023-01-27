@@ -3,9 +3,9 @@ import { useNavigate  } from 'react-router-dom';
 import { addNewcarServiceSchema } from 'Validations/FormsValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
+import { Modal, Button } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './AddNewCarService.css';
-import { Modal, Button } from "react-bootstrap";
 
 /* Add New Car Service Component
    A component that add new car service to the database */

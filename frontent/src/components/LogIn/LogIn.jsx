@@ -3,11 +3,11 @@ import { logInSchema } from 'Validations/FormsValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate  } from 'react-router-dom';
+import { Modal, Button } from "react-bootstrap";
 import md5 from 'md5';
 import ReCAPTCHA from 'react-google-recaptcha';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './LogIn.css';
-import { Modal, Button } from "react-bootstrap";
 
 /* LogIn Component */
 const LogIn = () => {

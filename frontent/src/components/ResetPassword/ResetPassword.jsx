@@ -4,9 +4,9 @@ import {resetPasswordSchema } from 'Validations/FormsValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { Modal, Button } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ResetPassword.css';
-import { Modal, Button } from "react-bootstrap";
 
 /* ResetPassword Component */
 const ResetPassword = () => {
