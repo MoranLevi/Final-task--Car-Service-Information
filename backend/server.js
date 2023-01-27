@@ -316,8 +316,7 @@ app.post('/reCaptchaValidation', async (req, res) => {
     }else{ // if the request is invalid
         console.log('reCAPTCHA verification failed');
         res.status(400)
-        // res.send("ReCAPTCHA verification failed", token)
-        res.send(token)
+        res.send("ReCAPTCHA verification failed", token)
         return
     }
 })
