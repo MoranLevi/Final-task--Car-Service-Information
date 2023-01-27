@@ -7,9 +7,6 @@ import md5 from 'md5';
 import ReCAPTCHA from 'react-google-recaptcha';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './LogIn.css';
-
-
-import Popup from 'reactjs-popup';
 import { Modal, Button } from "react-bootstrap";
 
 /* LogIn Component */

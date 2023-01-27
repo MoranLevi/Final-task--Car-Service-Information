@@ -8,8 +8,6 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './SignUp.css';
 import '../../css/sb-admin-2.css';
-
-import Popup from 'reactjs-popup';
 import { Modal, Button } from "react-bootstrap";
 
 /* SignUp Component */
